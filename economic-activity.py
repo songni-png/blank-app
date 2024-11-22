@@ -10,7 +10,7 @@ import os
 import glob
 
 # 데이터 경로 설정
-data_path = os.path.abspath('전국_시군구_경제활동인구_총괄_20241121153501.csv')
+data_path = os.path.abspath('data/전국_시군구_경제활동인구_총괄_20241121153501.csv')
 # CSV 데이터 불러오기
 df_korea_economics= pd.read_csv(data_path, header=3, encoding='utf-8')
 
@@ -46,7 +46,7 @@ korea_5179 = gdf_korea_sido.to_crs(epsg=5179)
 korea_map = folium.Map(location=[37, 126], zoom_start=7, tiles='cartodbpositron')
 
 # 제목 설정
-title = '전국 시군구 출생률'
+title = '전국 시군구 경제활동참가율'
 title_html = f'<h3 align="center" style="font-size:20px"><b>{title}</b></h3>'
 korea_map.get_root().html.add_child(folium.Element(title_html))
 
@@ -56,7 +56,7 @@ folium.Choropleth(
     data=df_korea_economics,
     columns=['행정구', '경제활동참가율(%)'],
     key_on='feature.properties.행정구',
-    legend = '전국 시군구 출생률',
+    legend = '전국 시군구 경제활동참가율(%)',
     fill_color='BuPu',
     fill_opacity=0.7,
     line_opacity=0.3
