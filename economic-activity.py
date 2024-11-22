@@ -65,22 +65,22 @@ if option == '경제활동참가율(%)':
     st.dataframe(df_korea_economics, height=200)
 
     # Choropleth map
-folium.Choropleth(
-    geo_data=gdf_korea_sido,
-    data=df_korea_economics,
-    columns=['행정구', '경제활동참가율(%)'],
-    key_on='feature.properties.행정구',
-    legend_name = '전국 시군구 경제활동참가율(%)',
-    fill_color='BuPu',
-    fill_opacity=0.7,
-    line_opacity=0.3
-).add_to(korea_map)
+    folium.Choropleth(
+        geo_data=gdf_korea_sido,
+        data=df_korea_economics,
+        columns=['행정구', '경제활동참가율(%)'],
+        key_on='feature.properties.행정구',
+        legend_name='전국 시군구 경제활동참가율(%)',
+        fill_color='BuPu',
+        fill_opacity=0.7,
+        line_opacity=0.3
+    ).add_to(korea_map)
 
-# Streamlit 설정
-st.markdown(title_html, unsafe_allow_html=True)
+    # Streamlit 설정
+    st.markdown(title_html, unsafe_allow_html=True)
 
-# Folium 지도 출력
-folium_static(korea_map)
+    # Folium 지도 출력
+    folium_static(korea_map)
 
 elif option == '옵션 2':
     # 다른 열 선택 및 정제
