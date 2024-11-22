@@ -122,8 +122,7 @@ st.scatter_chart(st.session_state.df, x="x", y="y", color=color2)
 st.title('전국 시군구 출생률')
 st.markdown(title_html, unsafe_allow_html=True)
 
-# Folium 지도 출력
-folium_static(korea_map)
+
 
 
 
