@@ -98,7 +98,8 @@ elif option == '고용률(%)':
         df_korea_economics = df_korea_economics.iloc[:, [0, 7]]
     df_korea_economics.columns = ['행정구', '고용률(%)']
     df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
-    df_korea_economics['고용률(%)'] = df_korea_economics['고용률(%)'].fillna(0,inplace=True)
+    df_korea_economics.reset_index(drop=True, inplace=True)
+    df_korea_economics['고용률(%)'] = df_korea_economics['고용률(%)'].fillna(0)
     st.dataframe(df_korea_economics, height=200)
 
     # Choropleth map
@@ -127,6 +128,7 @@ elif option == '실업률(%)':
         df_korea_economics = df_korea_economics.iloc[:, [0, 9]]
     df_korea_economics.columns = ['행정구', '실업률(%)']
     df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
+    df_korea_economics.reset_index(drop=True, inplace=True)
     df_korea_economics['실업률(%)'] = df_korea_economics['실업률(%)'].fillna(0)
     st.dataframe(df_korea_economics, height=200)
 
