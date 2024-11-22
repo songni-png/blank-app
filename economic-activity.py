@@ -18,15 +18,6 @@ data_path = os.path.abspath('전국_시군구_경제활동인구_총괄_20241121
 # CSV 데이터 불러오기
 df_korea_economics= pd.read_csv(data_path,encoding='utf-8')
 
-# 필요한 열만 선택
-df_korea_economics = df_korea_economics.iloc[:,[0,6]]
-# 데이터 정제
-df_korea_economics.columns = ['행정구', '경제활동참가율(%)']
-df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
-df_korea_economics['경제활동참가율(%)'] = df_korea_economics['경제활동참가율(%)'].fillna(0,inplace=True)
-
-st.dataframe(df_korea_economics, height=200)
-
 # GeoJSON 파일 경로 설정
 file_pattern = os.path.join('LARD_ADM_SECT_SGG_*.json')
 file_list = glob.glob(file_pattern)
