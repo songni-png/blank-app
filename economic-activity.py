@@ -55,7 +55,7 @@ folium.Choropleth(
     data=df_korea_economics,
     columns=['행정구', '경제활동참가율(%)'],
     key_on='feature.properties.행정구',
-    legend = '전국 시군구 경제활동참가율(%)',
+    legend_name = '전국 시군구 경제활동참가율(%)',
     fill_color='BuPu',
     fill_opacity=0.7,
     line_opacity=0.3
