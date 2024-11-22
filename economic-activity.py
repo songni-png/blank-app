@@ -16,7 +16,7 @@ st.sidebar.selectbox('항목', ['경제활동참가율(%)','취업률(%)', '실�
 # 데이터 경로 설정
 data_path = os.path.abspath('전국_시군구_경제활동인구_총괄_20241121153501.csv')
 # CSV 데이터 불러오기
-df_korea_economics= pd.read_csv(data_path,header=5,encoding='utf-8')
+df_korea_economics= pd.read_csv(data_path,encoding='utf-8')
 
 # 필요한 열만 선택
 df_korea_economics = df_korea_economics.iloc[:,[0,6]]
