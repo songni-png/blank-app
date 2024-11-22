@@ -11,7 +11,7 @@ st.header('전국 행정구역 경제활동 상관관계 분석')
 
 # 사이드바
 st.sidebar.write('## 항목을 고르시오.')
-option = st.sidebar.selectbox('항목', ['경제활동참가율(%)','취업률(%)', '실업률(%)'])
+option = st.sidebar.selectbox('항목', ['경제활동참가율(%)','고률(%)', '실업률(%)'])
 
 # 데이터 경로 설정
 data_path = os.path.abspath('전국_시군구_경제활동인구_총괄_20241121153501.csv')
@@ -90,16 +90,16 @@ if option == '경제활동참가율(%)':
     # Folium 지도 출력
     folium_static(korea_map_1)
 
-elif option == '취업률(%)':
+elif option == '고용률(%)':
     # 다른 열 선택 및 정제
     if '고용률(%)' in df_korea_economics.columns:
-        df_korea_economics = df_korea_economics[['행정구', '취업률(%)']]
+        df_korea_economics = df_korea_economics[['행정구', '고용률(%)']]
     else:
         df_korea_economics = df_korea_economics.iloc[:, [0, 7]]
-    df_korea_economics.columns = ['행정구', '취업률(%)']
+    df_korea_economics.columns = ['행정구', '고용률(%)']
     df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
     df_korea_economics.reset_index(drop=True, inplace=True)
-    df_korea_economics['취업률(%)'] = df_korea_economics['취업업률(%)'].fillna(0)
+    df_korea_economics['고용률(%)'] = df_korea_economics['고용률(%)'].fillna(0)
     st.dataframe(df_korea_economics, height=200)
 
     # Choropleth map
