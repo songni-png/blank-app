@@ -23,7 +23,7 @@ df_korea_economics = df_korea_economics.iloc[:,[0,6]]
 # 데이터 정제
 df_korea_economics.columns = ['행정구', '경제활동참가율(%)']
 df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
-df_korea_economics['경제활동참가율(%)'] = df_korea_economics['경제활동참가율(%)'].fillna(0)
+df_korea_economics['경제활동참가율(%)'] = df_korea_economics['경제활동참가율(%)'].fillna(0,inplace=True)
 
 st.dataframe(df_korea_economics, height=200)
 
@@ -77,7 +77,7 @@ if option == '경제활동참가율(%)':
     # 데이터 정제
     df_korea_economics.columns = ['행정구', '경제활동참가율(%)']
     df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
-    df_korea_economics['경제활동참가율(%)'] = df_korea_economics['경제활동참가율(%)'].fillna(0)
+    df_korea_economics['경제활동참가율(%)'] = df_korea_economics['경제활동참가율(%)'].fillna(0,inplace=True)
     st.dataframe(df_korea_economics, height=200)
 
     # Choropleth map
@@ -106,7 +106,7 @@ elif option == '고용률(%)':
         df_korea_economics = df_korea_economics.iloc[:, [0, 7]]
     df_korea_economics.columns = ['행정구', '고용률(%)']
     df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
-    df_korea_economics['고용률(%)'] = df_korea_economics['고용률(%)'].fillna(0)
+    df_korea_economics['고용률(%)'] = df_korea_economics['고용률(%)'].fillna(0,inplace=True)
     st.dataframe(df_korea_economics, height=200)
 
     # Choropleth map
