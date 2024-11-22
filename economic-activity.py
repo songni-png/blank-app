@@ -82,7 +82,7 @@ if option == '경제활동참가율(%)':
     # Folium 지도 출력
     folium_static(korea_map)
 
-elif option == '옵션 2':
+elif option == '고용률(%)':
     # 다른 열 선택 및 정제
     df_korea_economics = df_korea_economics.iloc[:, [0, 7]]
     df_korea_economics.columns = ['행정구', '고용률(%)']
@@ -108,7 +108,7 @@ elif option == '옵션 2':
     # Folium 지도 출력
     folium_static(korea_map)
 
-elif option == '옵션 3':
+elif option == '실업률(%)':
     # 또 다른 열 선택 및 정제
     df_korea_economics = df_korea_economics.iloc[:, [0, 9]]
     df_korea_economics.columns = ['행정구', '실업률(%)']
