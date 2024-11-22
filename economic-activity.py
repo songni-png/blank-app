@@ -25,7 +25,7 @@ df_korea_economics['경제활동참가율(%)'] = df_korea_economics['경제활�
 st.dataframe(df_korea_economics, height=200)
 
 # GeoJSON 파일 경로 설정
-file_pattern = '/absolute/path/to/LARD_ADM_SECT_SGG_*.json'
+file_pattern = os.path.join('LARD_ADM_SECT_SGG_*.json')
 file_list = glob.glob(file_pattern)
 
 if not file_list:
