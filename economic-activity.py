@@ -11,7 +11,7 @@ st.header('전국 행정구역 경제활동 상관관계 분석')
 
 # 사이드바
 st.sidebar.write('## 항목을 고르시오.')
-option = st.sidebar.selectbox('항목', ['경제활동참가율(%)','고률(%)', '실업률(%)'])
+option = st.sidebar.selectbox('항목', ['경제활동참가율(%)','고용률(%)', '실업률(%)'])
 
 # 데이터 경로 설정
 data_path = os.path.abspath('전국_시군구_경제활동인구_총괄_20241121153501.csv')
