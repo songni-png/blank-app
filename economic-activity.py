@@ -10,8 +10,7 @@ import os
 import glob
 
 # 데이터 경로 설정
-data_path = os.path.abspath('전국_시군구_출생아수__합계출산율_20241119114124.csv')
-
+data_path = os.path.abspath('전국_시군구_경제활동인구_총괄_20241121153501.csv')
 # CSV 데이터 불러오기
 df_korea_birthrate = pd.read_csv(data_path, header=3, encoding='utf-8')
 
