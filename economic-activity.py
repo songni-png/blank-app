@@ -90,23 +90,23 @@ elif option == '옵션 2':
     df_korea_economics['고용률(%)'] = df_korea_economics['고용률(%)'].fillna(0)
     st.dataframe(df_korea_economics, height=200)
 
-# Choropleth map
-folium.Choropleth(
-    geo_data=gdf_korea_sido,
-    data=df_korea_economics,
-    columns=['행정구', '고용률(%)'],
-    key_on='feature.properties.행정구',
-    legend_name = '전국 시군구 고용률(%)',
-    fill_color='PiYG',
-    fill_opacity=0.7,
-    line_opacity=0.3
-).add_to(korea_map)
+    # Choropleth map
+    folium.Choropleth(
+        geo_data=gdf_korea_sido,
+        data=df_korea_economics,
+        columns=['행정구', '고용률(%)'],
+        key_on='feature.properties.행정구',
+        legend_name='전국 시군구 고용률(%)',
+        fill_color='PiYG',
+        fill_opacity=0.7,
+        line_opacity=0.3
+    ).add_to(korea_map)
 
-# Streamlit 설정
-st.markdown(title_html, unsafe_allow_html=True)
+    # Streamlit 설정
+    st.markdown(title_html, unsafe_allow_html=True)
 
-# Folium 지도 출력
-folium_static(korea_map)
+    # Folium 지도 출력
+    folium_static(korea_map)
 
 elif option == '옵션 3':
     # 또 다른 열 선택 및 정제
@@ -116,23 +116,20 @@ elif option == '옵션 3':
     df_korea_economics['실업률(%)'] = df_korea_economics['실업률(%)'].fillna(0)
     st.dataframe(df_korea_economics, height=200)
 
-# Choropleth map
-folium.Choropleth(
-    geo_data=gdf_korea_sido,
-    data=df_korea_economics,
-    columns=['행정구', '실업률(%)'],
-    key_on='feature.properties.행정구',
-    legend_name='전국 시군구 실업률(%)',
-    fill_color='RdPu',
-    fill_opacity=0.7,
-    line_opacity=0.3
-).add_to(korea_map)
+    # Choropleth map
+    folium.Choropleth(
+        geo_data=gdf_korea_sido,
+        data=df_korea_economics,
+        columns=['행정구', '실업률(%)'],
+        key_on='feature.properties.행정구',
+        legend_name='전국 시군구 실업률(%)',
+        fill_color='RdPu',
+        fill_opacity=0.7,
+        line_opacity=0.3
+    ).add_to(korea_map)
 
-# Streamlit 설정
-st.markdown(title_html, unsafe_allow_html=True)
+    # Streamlit 설정
+    st.markdown(title_html, unsafe_allow_html=True)
 
-# Folium 지도 출력
-folium_static(korea_map)
-
-
-
+    # Folium 지도 출력
+    folium_static(korea_map)
