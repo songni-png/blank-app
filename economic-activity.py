@@ -46,12 +46,25 @@ korea_5179 = gdf_korea_sido.to_crs(epsg=5179)
 
 
 # 기본 지도 생성
-korea_map = folium.Map(location=[37, 126], zoom_start=7, tiles='cartodbpositron')
-
+korea_map_1 = folium.Map(location=[37, 126], zoom_start=7, tiles='cartodbpositron')
 # 제목 설정
 title = '전국 시군구 경제활동참가율'
 title_html = f'<h3 align="center" style="font-size:20px"><b>{title}</b></h3>'
-korea_map.get_root().html.add_child(folium.Element(title_html))
+korea_map_1.get_root().html.add_child(folium.Element(title_html))
+
+# 기본 지도 생성
+korea_map_2 = folium.Map(location=[37, 126], zoom_start=7, tiles='cartodbpositron')
+# 제목 설정
+title = '전국 시군구 고용률'
+title_html = f'<h3 align="center" style="font-size:20px"><b>{title}</b></h3>'
+korea_map_2.get_root().html.add_child(folium.Element(title_html))
+
+# 기본 지도 생성
+korea_map_3 = folium.Map(location=[37, 126], zoom_start=7, tiles='cartodbpositron')
+# 제목 설정
+title = '전국 시군구 실업률'
+title_html = f'<h3 align="center" style="font-size:20px"><b>{title}</b></h3>'
+korea_map_3.get_root().html.add_child(folium.Element(title_html))
 
 
 # 선택한 옵션에 따라 다른 코드 실행
@@ -77,13 +90,13 @@ if option == '경제활동참가율(%)':
         fill_color='BuPu',
         fill_opacity=0.7,
         line_opacity=0.3
-    ).add_to(korea_map)
+    ).add_to(korea_map_1)
 
     # Streamlit 설정
     st.markdown(title_html, unsafe_allow_html=True)
 
     # Folium 지도 출력
-    folium_static(korea_map)
+    folium_static(korea_map_1)
 
 elif option == '고용률(%)':
     # 다른 열 선택 및 정제
@@ -106,13 +119,13 @@ elif option == '고용률(%)':
         fill_color='PiYG',
         fill_opacity=0.7,
         line_opacity=0.3
-    ).add_to(korea_map)
+    ).add_to(korea_map_2)
 
     # Streamlit 설정
     st.markdown(title_html, unsafe_allow_html=True)
 
     # Folium 지도 출력
-    folium_static(korea_map)
+    folium_static(korea_map_2)
 
 elif option == '실업률(%)':
     # 또 다른 열 선택 및 정제
@@ -135,10 +148,10 @@ elif option == '실업률(%)':
         fill_color='RdPu',
         fill_opacity=0.7,
         line_opacity=0.3
-    ).add_to(korea_map)
+    ).add_to(korea_map_3)
 
     # Streamlit 설정
     st.markdown(title_html, unsafe_allow_html=True)
 
     # Folium 지도 출력
-    folium_static(korea_map)
+    folium_static(korea_map_3)
