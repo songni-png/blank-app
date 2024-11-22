@@ -57,7 +57,10 @@ korea_map.get_root().html.add_child(folium.Element(title_html))
 # 선택한 옵션에 따라 다른 코드 실행
 if option == '경제활동참가율(%)':
     # 필요한 열만 선택
-    df_korea_economics = df_korea_economics.iloc[:, [0, 6]]
+    if '경제활동참가율(%)' in df_korea_economics.columns:
+        df_korea_economics = df_korea_economics[['행정구', '경제활동참가율(%)']]
+    else:
+        df_korea_economics = df_korea_economics.iloc[:, [0, 6]]
     # 데이터 정제
     df_korea_economics.columns = ['행정구', '경제활동참가율(%)']
     df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
@@ -84,7 +87,10 @@ if option == '경제활동참가율(%)':
 
 elif option == '고용률(%)':
     # 다른 열 선택 및 정제
-    df_korea_economics = df_korea_economics.iloc[:, [0, 7]]
+    if '고용률(%)' in df_korea_economics.columns:
+        df_korea_economics = df_korea_economics[['행정구', '고용률(%)']]
+    else:
+        df_korea_economics = df_korea_economics.iloc[:, [0, 7]]
     df_korea_economics.columns = ['행정구', '고용률(%)']
     df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
     df_korea_economics['고용률(%)'] = df_korea_economics['고용률(%)'].fillna(0)
@@ -110,7 +116,10 @@ elif option == '고용률(%)':
 
 elif option == '실업률(%)':
     # 또 다른 열 선택 및 정제
-    df_korea_economics = df_korea_economics.iloc[:, [0, 9]]
+    if '실업률(%)' in df_korea_economics.columns:
+        df_korea_economics = df_korea_economics[['행정구', '실업률(%)']]
+    else:
+        df_korea_economics = df_korea_economics.iloc[:, [0, 9]]
     df_korea_economics.columns = ['행정구', '실업률(%)']
     df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
     df_korea_economics['실업률(%)'] = df_korea_economics['실업률(%)'].fillna(0)
