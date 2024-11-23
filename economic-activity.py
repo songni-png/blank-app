@@ -5,6 +5,7 @@ from streamlit_folium import folium_static
 import geopandas as gpd
 import os
 import glob
+import numpy as np
 st.cache_data.clear()
 # 텍스트
 st.header('대한민국 경제 상황과') 
