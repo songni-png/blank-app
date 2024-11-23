@@ -7,7 +7,7 @@ import os
 import glob
 import numpy as np
 st.cache_data.clear()
-
+def get_data():
 # 텍스트
 st.header('대한민국 경제 상황과') 
 st.header('전국 행정구역 경제활동 상관관계 분석')
