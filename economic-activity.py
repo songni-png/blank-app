@@ -32,6 +32,9 @@ if 'A 행정구역별' not in df_korea_economics.columns:
 
 # CSV 파일 정제
 def clean_data(df, column_name, new_column_name):
+    if column_name not in df.columns:
+        st.error(f"'{column_name}' 열이 CSV 파일에 존재하지 않습니다.")
+        st.stop()
     df = df[['A 행정구역별', column_name]]
     df.columns = ['행정구', new_column_name]
     df['행정구'] = df['행정구'].str.replace('\d+', '', regex=True).str.strip()
@@ -41,7 +44,7 @@ def clean_data(df, column_name, new_column_name):
 
 df_korea_economics_1 = clean_data(df_korea_economics, 'H202401 2024.1/2.5', '경제활동참가율(%)')
 df_korea_economics_2 = clean_data(df_korea_economics, 'H202402 2024.1/2.6', '고용률(%)')
-df_korea_economics_3 = clean_data(df_korea_economics, 'H202403 2024.1/2.7', '실업률(%)')
+df_korea_economics_3 = clean_data(df_korea_economics, 'H202403 2024.1/2.8', '실업률(%)')
 
 # GeoJSON 파일 경로 설정
 file_pattern = os.path.join('LARD_ADM_SECT_SGG_*.json')
@@ -91,5 +94,6 @@ folium.Choropleth(
 
 st.markdown(f"<h3 align='center'>{selected_column}</h3>", unsafe_allow_html=True)
 folium_static(korea_map)
+
 
 
