@@ -61,7 +61,7 @@ if option == '경제활동참가율(%)':
         df_korea_economics = df_korea_economics[['행정구', '경제활동참가율(%)']]
     else:
         df_korea_economics = df_korea_economics.iloc[:, [0, 6]]
-    df_korea_economics.columns = ['A 행정구역', '경제활동참가율(%)']
+    df_korea_economics.columns = ['A 행정구역별', 'T6 경제활동참가율 (％)']
     df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
     df_korea_economics.reset_index(drop=True, inplace=True)
     df_korea_economics['경제활동참가율(%)'] = pd.to_numeric(df_korea_economics['경제활동참가율(%)'], errors='coerce').fillna(0)
@@ -79,36 +79,7 @@ if option == '경제활동참가율(%)':
     ).add_to(korea_map_1)
 
     st.markdown(title_html, unsafe_allow_html=True)
-    folium_static(korea_map_1)
-
-elif option == '고용률(%)':
-    if '고용률(%)' in df_korea_economics.columns:
-        df_korea_economics = df_korea_economics[['행정구', '고용률(%)']]
-    else:
-        df_korea_economics = df_korea_economics.iloc[:, [0, 7]]
-    df_korea_economics.columns = ['행정구', '고용률(%)']
-    df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
-    df_korea_economics.reset_index(drop=True, inplace=True)
-    df_korea_economics['고용률(%)'] = pd.to_numeric(df_korea_economics['고용률(%)'], errors='coerce').fillna(0)
-    st.dataframe(df_korea_economics, height=200)
-
-    folium.Choropleth(
-        geo_data=gdf_korea_sido,
-        data=df_korea_economics,
-        columns=['행정구', '고용률(%)'],
-        key_on='feature.properties.행정구',
-        legend_name='전국 시군구 고용률(%)',
-        fill_color='PiYG',
-        fill_opacity=0.7,
-        line_opacity=0.3
-    ).add_to(korea_map_2)
-
-    st.markdown(title_html, unsafe_allow_html=True)
-    folium_static(korea_map_2)
-
-elif option == '실업률(%)':
-    if '실업률(%)' in df_korea_economics.columns:
-        df_korea_economics = df_korea_economics[['행정구', '실업률(%)']]
+    folium_static(korea_ma별', 'T8 실업률 (％)']]
     else:
         df_korea_economics = df_korea_economics.iloc[:, [0, 9]]
     df_korea_economics.columns = ['행정구', '실업률(%)']
