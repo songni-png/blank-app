@@ -61,10 +61,10 @@ if option == '경제활동참가율(%)':
         df_korea_economics = df_korea_economics[['A 행정구역별', 'T6 경제활동참가율 (％)']]
     else:
         df_korea_economics = df_korea_economics.iloc[:, [0, 6]]
-        df_korea_economics.columns = ['A 행정구역별', 'T6 경제활동참가율 (％)']
-        df_korea_economics['A 행정구역별'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
+        df_korea_economics.columns = ['행정구', '경제활동참가율(％)']
+        df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
         df_korea_economics.reset_index(drop=True, inplace=True)
-        df_korea_economics['T6 경제활동참가율 (％)'] = pd.to_numeric(df_korea_economics['경제활동참가율(%)'], errors='coerce').fillna(0)
+        df_korea_economics['경제활동참가율(%)'] = pd.to_numeric(df_korea_economics['경제활동참가율(%)'], errors='coerce').fillna(0)
         st.dataframe(df_korea_economics, height=200)
 
     folium.Choropleth(
@@ -87,10 +87,10 @@ elif option == '고용률(%)':
         df_korea_economics = df_korea_economics[['A 행정구역 별', 'T7 고용률 (%)']]
     else:
         df_korea_economics = df_korea_economics.iloc[:, [0, 7]]
-        df_korea_economics.columns = ['A 행정구역 별', 'T7 고용률 (%)']
-        df_korea_economics['A 행정구역 별'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
+        df_korea_economics.columns = ['행정구', '고용률(%)']
+        df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
         df_korea_economics.reset_index(drop=True, inplace=True)
-        df_korea_economics['T7 고용률 (%)'] = pd.to_numeric(df_korea_economics['고용률(%)'], errors='coerce').fillna(0)
+        df_korea_economics['고용률(%)'] = pd.to_numeric(df_korea_economics['고용률(%)'], errors='coerce').fillna(0)
         st.dataframe(df_korea_economics, height=200)
 
     folium.Choropleth(
@@ -109,13 +109,13 @@ elif option == '고용률(%)':
 
 elif option == '실업률(%)':
     if '실업률(%)' in df_korea_economics.columns:
-        df_korea_economics = df_korea_economics[['A 행정구역 별',  'T8 실업률 (％)']]
+        df_korea_economics = df_korea_economics[['A 행정구역 별',  'T8 실업률 (%)']]
     else:
         df_korea_economics = df_korea_economics.iloc[:, [0, 9]]
-        df_korea_economics.columns = ['A 행정구역 별',  'T8 실업률 (％)']
-        df_korea_economics['A 행정구역 별'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
+        df_korea_economics.columns = ['행정구',  '실업률(%)']
+        df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
         df_korea_economics.reset_index(drop=True, inplace=True)
-        df_korea_economics['T8 실업률 (％)'] = pd.to_numeric(df_korea_economics['실업률(%)'], errors='coerce').fillna(0)
+        df_korea_economics['실업률(%)'] = pd.to_numeric(df_korea_economics['실업률(%)'], errors='coerce').fillna(0)
         st.dataframe(df_korea_economics, height=200)
 
     folium.Choropleth(
