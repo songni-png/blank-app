@@ -19,16 +19,9 @@ st.write(f"선택된 항목: {option}")
 
 # 데이터 경로 설정
 data_path = os.path.abspath('전국_시군구_경제활동인구_총괄_20241121153501.csv')
-if not os.path.exists(data_path):
-    st.error(f"CSV 파일을 찾을 수 없습니다: {data_path}")
-    st.stop()
 
 # CSV 데이터 불러오기
 df_korea_economics = pd.read_csv(data_path, encoding='utf-8')
-st.write("CSV 파일 열 이름:", df_korea_economics.columns.tolist())
-if 'A 행정구역별' not in df_korea_economics.columns:
-    st.error("'A 행정구역별' 열이 CSV 파일에 존재하지 않습니다. 파일 구조를 확인하세요.")
-    st.stop()
 
 # CSV 파일 정제
 def clean_data(df, column_name, new_column_name):
@@ -41,6 +34,7 @@ def clean_data(df, column_name, new_column_name):
     df.reset_index(drop=True, inplace=True)
     df[new_column_name] = pd.to_numeric(df[new_column_name], errors='coerce').fillna(0)
     return df
+st.dataframe(df,height=200)
 
 df_korea_economics_1 = clean_data(df_korea_economics, 'H202401 2024.1/2.5', '경제활동참가율(%)')
 df_korea_economics_2 = clean_data(df_korea_economics, 'H202401 2024.1/2.6', '고용률(%)')
