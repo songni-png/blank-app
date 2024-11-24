@@ -6,4 +6,4 @@ streamlit-folium
 fiona
 shapely
 streamlit-elements
-plotly
+
