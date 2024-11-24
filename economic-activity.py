@@ -98,7 +98,7 @@ folium.Choropleth(
 st.markdown(f"<h3 align='center'>{selected_column}</h3>", unsafe_allow_html=True)
 folium_static(korea_map)
 
-df_korea_economics.column = [행정구,15세이상인구(천명),경제활동인구(천명),취업자(천명),실업자(천명),비경제활동인구(천명),경제활동참가율(%),고용률(%),15~64세 고용률(%),실업률(%)]
+df_korea_economics.column = ['행정구','15세이상인구(천명)','경제활동인구(천명)','취업자(천명)','실업자(천명)','비경제활동인구(천명)','경제활동참가율(%)','고용률(%)','15~64세 고용률(%)','실업률(%)']
 # 수정된 데이터프레임 출력
 st.write("First row last word:", first_row_last_word)
 st.dataframe(df_korea_economics)
