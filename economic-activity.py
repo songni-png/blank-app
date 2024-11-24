@@ -11,10 +11,7 @@ import numpy as np
 st.header('대한민국 경제 상황과') 
 st.header('전국 행정구역 경제활동 상관관계 분석')
 
-# 사이드바
-st.sidebar.write('## 항목을 고르시오.')
 
-st.write(f"선택된 항목: {option}")
 
 # 데이터 경로 설정
 data_path = os.path.abspath('전국_시군구_경제활동인구_총괄_20241121153501.csv')
