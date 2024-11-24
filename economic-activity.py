@@ -84,10 +84,10 @@ if option == '경제활동참가율(%)':
     
 elif option == '고용률(%)':
     if '고용률(%)' in df_korea_economics.columns:
-        df_korea_economics = df_korea_economics[['A 행정구역 별', '고용률(%)']]
+        df_korea_economics = df_korea_economics[['A 행정구역 별', 'T7 고용률 (%)']]
     else:
         df_korea_economics = df_korea_economics.iloc[:, [0, 7]]
-        df_korea_economics.columns = ['행정구', '고용률(%)']
+        df_korea_economics.columns = ['A 행정구역 별', 'T7 고용률 (%)']
         df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
         df_korea_economics.reset_index(drop=True, inplace=True)
         df_korea_economics['고용률(%)'] = pd.to_numeric(df_korea_economics['고용률(%)'], errors='coerce').fillna(0)
