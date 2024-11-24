@@ -24,10 +24,10 @@ data_path = os.path.abspath('전국_시군구_경제활동인구_총괄_20241121
 df_korea_economics = pd.read_csv(data_path, encoding='utf-8')
 
 # 첫 번째 행의 마지막 단어 추출
-first_row_last_word = df_korea_economics.iloc[1,0].split()[0]
+first_row_last_word = df_korea_economics.str.split().str[1:].str.join(' ')
 
 # 첫 번째 행 제거
-df_korea_economics = df_korea_economics.drop(1)
+df_korea_economics = df_korea_economics.drop(0)
 
 # 1열 제거
 columns_to_drop = [col for col in df_korea_economics.columns if col.startswith('T')]
@@ -98,6 +98,7 @@ folium.Choropleth(
 st.markdown(f"<h3 align='center'>{selected_column}</h3>", unsafe_allow_html=True)
 folium_static(korea_map)
 
+df_korea_economics.column = [행정구,15세이상인구(천명),경제활동인구(천명),취업자(천명),실업자(천명),비경제활동인구(천명),경제활동참가율(%),고용률(%),15~64세 고용률(%),실업률(%)]
 # 수정된 데이터프레임 출력
 st.write("First row last word:", first_row_last_word)
 st.dataframe(df_korea_economics)
