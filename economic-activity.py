@@ -19,6 +19,9 @@ st.write(f"선택된 항목: {option}")
 
 # 데이터 경로 설정
 data_path = os.path.abspath('전국_시군구_경제활동인구_총괄_20241121153501.csv')
+if not os.path.exists(data_path):
+    st.error(f"CSV 파일을 찾을 수 없습니다: {data_path}")
+    st.stop()
 
 # CSV 데이터 불러오기
 df_korea_economics = pd.read_csv(data_path, encoding='utf-8')
@@ -28,11 +31,13 @@ if 'A 행정구역별' not in df_korea_economics.columns:
     st.stop()
 
 # CSV 파일 정제
-df_korea_economics = df_korea_economics[['A 행정구역별', 'H202401 2024.1/2.5']]
-df_korea_economics.columns = ['행정구', '경제활동참가율(%)']
+df_korea_economics = df_korea_economics[['A 행정구역별', 'H202401 2024.1/2.5', 'H202402 2024.1/2.6', 'H202403 2024.1/2.7']]
+df_korea_economics.columns = ['행정구', '경제활동참가율(%)', '고용률(%)', '실업률(%)']
 df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
 df_korea_economics.reset_index(drop=True, inplace=True)
 df_korea_economics['경제활동참가율(%)'] = pd.to_numeric(df_korea_economics['경제활동참가율(%)'], errors='coerce').fillna(0)
+df_korea_economics['고용률(%)'] = pd.to_numeric(df_korea_economics['고용률(%)'], errors='coerce').fillna(0)
+df_korea_economics['실업률(%)'] = pd.to_numeric(df_korea_economics['실업률(%)'], errors='coerce').fillna(0)
 st.dataframe(df_korea_economics, height=200)
 
 # GeoJSON 파일 경로 설정
