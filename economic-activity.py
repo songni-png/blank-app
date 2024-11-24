@@ -31,23 +31,17 @@ if 'A 행정구역별' not in df_korea_economics.columns:
     st.stop()
 
 # CSV 파일 정제
-df_korea_economics_1 = df_korea_economics[['A 행정구역별', 'H202401 2024.1/2.5']]
-df_korea_economics_1.columns = ['행정구', '경제활동참가율(%)']
-df_korea_economics_1['행정구'] = df_korea_economics_1['행정구'].str.replace('\d+', '', regex=True).str.strip()
-df_korea_economics_1.reset_index(drop=True, inplace=True)
-df_korea_economics_1['경제활동참가율(%)'] = pd.to_numeric(df_korea_economics_1['경제활동참가율(%)'], errors='coerce').fillna(0)
+def clean_data(df, column_name, new_column_name):
+    df = df[['A 행정구역별', column_name]]
+    df.columns = ['행정구', new_column_name]
+    df['행정구'] = df['행정구'].str.replace('\d+', '', regex=True).str.strip()
+    df.reset_index(drop=True, inplace=True)
+    df[new_column_name] = pd.to_numeric(df[new_column_name], errors='coerce').fillna(0)
+    return df
 
-df_korea_economics_2 = df_korea_economics[['A 행정구역별', 'H202402 2024.1/2.6']]
-df_korea_economics_2.columns = ['행정구', '고용률(%)']
-df_korea_economics_2['행정구'] = df_korea_economics_2['행정구'].str.replace('\d+', '', regex=True).str.strip()
-df_korea_economics_2.reset_index(drop=True, inplace=True)
-df_korea_economics_2['고용률(%)'] = pd.to_numeric(df_korea_economics_2['고용률(%)'], errors='coerce').fillna(0)
-
-df_korea_economics_3 = df_korea_economics[['A 행정구역별', 'H202403 2024.1/2.7']]
-df_korea_economics_3.columns = ['행정구', '실업률(%)']
-df_korea_economics_3['행정구'] = df_korea_economics_3['행정구'].str.replace('\d+', '', regex=True).str.strip()
-df_korea_economics_3.reset_index(drop=True, inplace=True)
-df_korea_economics_3['실업률(%)'] = pd.to_numeric(df_korea_economics_3['실업률(%)'], errors='coerce').fillna(0)
+df_korea_economics_1 = clean_data(df_korea_economics, 'H202401 2024.1/2.5', '경제활동참가율(%)')
+df_korea_economics_2 = clean_data(df_korea_economics, 'H202402 2024.1/2.6', '고용률(%)')
+df_korea_economics_3 = clean_data(df_korea_economics, 'H202403 2024.1/2.7', '실업률(%)')
 
 # GeoJSON 파일 경로 설정
 file_pattern = os.path.join('LARD_ADM_SECT_SGG_*.json')
