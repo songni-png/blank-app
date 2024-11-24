@@ -24,7 +24,7 @@ data_path = os.path.abspath('전국_시군구_경제활동인구_총괄_20241121
 df_korea_economics = pd.read_csv(data_path, encoding='utf-8')
 
 # 첫 번째 행의 마지막 단어 추출
-first_row_last_word = df_korea_economics.iloc[1,0].split()[-1]
+first_row_last_word = df_korea_economics.iloc[1,0].split()[1]
 
 # 첫 번째 행 제거
 df_korea_economics = df_korea_economics.drop(0)
