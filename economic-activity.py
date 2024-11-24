@@ -58,7 +58,7 @@ korea_map_3.get_root().html.add_child(folium.Element(title_html))
 # 선택한 옵션에 따라 다른 코드 실행
 if option == '경제활동참가율(%)':
     if '경제활동참가율(%)' in df_korea_economics.columns:
-        df_korea_economics = df_korea_economics[['A 행정구역별', 'T6 경제활동참가율 (％)']]
+        df_korea_economics = df_korea_economics[['1102 서울 중구', '62.1']]
     else:
         df_korea_economics = df_korea_economics.iloc[:, [0, 6]]
         df_korea_economics.columns = ['행정구', '경제활동참가율(％)']
