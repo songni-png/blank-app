@@ -34,7 +34,7 @@ def clean_data(df, column_name, new_column_name):
     df.reset_index(drop=True, inplace=True)
     df[new_column_name] = pd.to_numeric(df[new_column_name], errors='coerce').fillna(0)
     return df
-st.dataframe(df,height=200)
+st.dataframe(df_korea_economics,height=200)
 
 df_korea_economics_1 = clean_data(df_korea_economics, 'H202401 2024.1/2.5', '경제활동참가율(%)')
 df_korea_economics_2 = clean_data(df_korea_economics, 'H202401 2024.1/2.6', '고용률(%)')
