@@ -31,14 +31,23 @@ if 'A 행정구역별' not in df_korea_economics.columns:
     st.stop()
 
 # CSV 파일 정제
-df_korea_economics = df_korea_economics[['A 행정구역별', 'H202401 2024.1/2.5', 'H202402 2024.1/2.6', 'H202403 2024.1/2.7']]
-df_korea_economics.columns = ['행정구', '경제활동참가율(%)', '고용률(%)', '실업률(%)']
-df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
-df_korea_economics.reset_index(drop=True, inplace=True)
-df_korea_economics['경제활동참가율(%)'] = pd.to_numeric(df_korea_economics['경제활동참가율(%)'], errors='coerce').fillna(0)
-df_korea_economics['고용률(%)'] = pd.to_numeric(df_korea_economics['고용률(%)'], errors='coerce').fillna(0)
-df_korea_economics['실업률(%)'] = pd.to_numeric(df_korea_economics['실업률(%)'], errors='coerce').fillna(0)
-st.dataframe(df_korea_economics, height=200)
+df_korea_economics_1 = df_korea_economics[['A 행정구역별', 'H202401 2024.1/2.5']]
+df_korea_economics_1.columns = ['행정구', '경제활동참가율(%)']
+df_korea_economics_1['행정구'] = df_korea_economics_1['행정구'].str.replace('\d+', '', regex=True).str.strip()
+df_korea_economics_1.reset_index(drop=True, inplace=True)
+df_korea_economics_1['경제활동참가율(%)'] = pd.to_numeric(df_korea_economics_1['경제활동참가율(%)'], errors='coerce').fillna(0)
+
+df_korea_economics_2 = df_korea_economics[['A 행정구역별', 'H202402 2024.1/2.6']]
+df_korea_economics_2.columns = ['행정구', '고용률(%)']
+df_korea_economics_2['행정구'] = df_korea_economics_2['행정구'].str.replace('\d+', '', regex=True).str.strip()
+df_korea_economics_2.reset_index(drop=True, inplace=True)
+df_korea_economics_2['고용률(%)'] = pd.to_numeric(df_korea_economics_2['고용률(%)'], errors='coerce').fillna(0)
+
+df_korea_economics_3 = df_korea_economics[['A 행정구역별', 'H202403 2024.1/2.7']]
+df_korea_economics_3.columns = ['행정구', '실업률(%)']
+df_korea_economics_3['행정구'] = df_korea_economics_3['행정구'].str.replace('\d+', '', regex=True).str.strip()
+df_korea_economics_3.reset_index(drop=True, inplace=True)
+df_korea_economics_3['실업률(%)'] = pd.to_numeric(df_korea_economics_3['실업률(%)'], errors='coerce').fillna(0)
 
 # GeoJSON 파일 경로 설정
 file_pattern = os.path.join('LARD_ADM_SECT_SGG_*.json')
@@ -54,17 +63,22 @@ gdf_korea_sido = gpd.GeoDataFrame(pd.concat(gdfs, ignore_index=True))
 
 # 'SGG_NM' 정제
 gdf_korea_sido['행정구'] = gdf_korea_sido['SGG_NM'].str.split().str[1:].str.join(' ')
-df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
+df_korea_economics_1['행정구'] = df_korea_economics_1['행정구'].str.replace('\d+', '', regex=True).str.strip()
+df_korea_economics_2['행정구'] = df_korea_economics_2['행정구'].str.replace('\d+', '', regex=True).str.strip()
+df_korea_economics_3['행정구'] = df_korea_economics_3['행정구'].str.replace('\d+', '', regex=True).str.strip()
 
 # 선택한 옵션에 따라 다른 코드 실행
 if option == '경제활동참가율(%)':
+    selected_df = df_korea_economics_1
     selected_column = '경제활동참가율(%)'
 elif option == '고용률(%)':
+    selected_df = df_korea_economics_2
     selected_column = '고용률(%)'
 elif option == '실업률(%)':
+    selected_df = df_korea_economics_3
     selected_column = '실업률(%)'
 
-if selected_column not in df_korea_economics.columns:
+if selected_column not in selected_df.columns:
     st.error(f"선택한 항목 '{selected_column}' 열이 CSV 데이터에 없습니다.")
     st.stop()
 
@@ -72,7 +86,7 @@ if selected_column not in df_korea_economics.columns:
 korea_map = folium.Map(location=[37, 126], zoom_start=7, tiles='cartodbpositron')
 folium.Choropleth(
     geo_data=gdf_korea_sido,
-    data=df_korea_economics,
+    data=selected_df,
     columns=['행정구', selected_column],
     key_on='feature.properties.행정구',
     legend_name=f'전국 시군구 {selected_column}',
