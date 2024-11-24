@@ -34,7 +34,6 @@ def clean_data(df, column_name, new_column_name):
     df.reset_index(drop=True, inplace=True)
     df[new_column_name] = pd.to_numeric(df[new_column_name], errors='coerce').fillna(0)
     return df
-st.dataframe(df_korea_economics,height=200)
 
 df_korea_economics_1 = clean_data(df_korea_economics, 'H202401 2024.1/2.5', '경제활동참가율(%)')
 df_korea_economics_2 = clean_data(df_korea_economics, 'H202401 2024.1/2.6', '고용률(%)')
@@ -57,6 +56,8 @@ gdf_korea_sido['행정구'] = gdf_korea_sido['SGG_NM'].str.split().str[1:].str.j
 df_korea_economics_1['행정구'] = df_korea_economics_1['행정구'].str.replace('\d+', '', regex=True).str.strip()
 df_korea_economics_2['행정구'] = df_korea_economics_2['행정구'].str.replace('\d+', '', regex=True).str.strip()
 df_korea_economics_3['행정구'] = df_korea_economics_3['행정구'].str.replace('\d+', '', regex=True).str.strip()
+
+st.dataframe(df_korea_economics,height=200)
 
 # 선택한 옵션에 따라 다른 코드 실행
 if option == '경제활동참가율(%)':
