@@ -23,6 +23,16 @@ data_path = os.path.abspath('전국_시군구_경제활동인구_총괄_20241121
 # CSV 데이터 불러오기
 df_korea_economics = pd.read_csv(data_path, encoding='utf-8')
 
+# 첫 번째 행의 마지막 단어 추출
+first_row_last_word = df_korea_economics.iloc[0, -1].split()[-1]
+
+# 첫 번째 행 제거
+df_korea_economics = df_korea_economics.drop(0)
+
+# T1, T2, T3, T4 열 제거
+columns_to_drop = [col for col in df_korea_economics.columns if col.startswith('T1') or col.startswith('T2') or col.startswith('T3') or col.startswith('T4')]
+df_korea_economics = df_korea_economics.drop(columns=columns_to_drop)
+
 # CSV 파일 정제
 def clean_data(df, column_name, new_column_name):
     if column_name not in df.columns:
@@ -57,8 +67,6 @@ df_korea_economics_1['행정구'] = df_korea_economics_1['행정구'].str.replac
 df_korea_economics_2['행정구'] = df_korea_economics_2['행정구'].str.replace('\d+', '', regex=True).str.strip()
 df_korea_economics_3['행정구'] = df_korea_economics_3['행정구'].str.replace('\d+', '', regex=True).str.strip()
 
-st.dataframe(df_korea_economics,height=200)
-
 # 선택한 옵션에 따라 다른 코드 실행
 if option == '경제활동참가율(%)':
     selected_df = df_korea_economics_1
@@ -89,6 +97,11 @@ folium.Choropleth(
 
 st.markdown(f"<h3 align='center'>{selected_column}</h3>", unsafe_allow_html=True)
 folium_static(korea_map)
+
+# 수정된 데이터프레임 출력
+st.write("First row last word:", first_row_last_word)
+st.dataframe(df_korea_economics)
+
 
 
 
