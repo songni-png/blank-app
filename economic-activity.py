@@ -27,7 +27,7 @@ df_korea_economics = pd.read_csv(data_path, encoding='utf-8')
 first_row_last_word = df_korea_economics.iloc[1,0].split()[0]
 
 # 첫 번째 행 제거
-df_korea_economics = df_korea_economics.drop(0)
+df_korea_economics = df_korea_economics.drop(1)
 
 # 1열 제거
 columns_to_drop = [col for col in df_korea_economics.columns if col.startswith('T')]
