@@ -43,8 +43,8 @@ def clean_data(df, column_name, new_column_name):
     return df
 
 df_korea_economics_1 = clean_data(df_korea_economics, 'H202401 2024.1/2.5', '경제활동참가율(%)')
-df_korea_economics_2 = clean_data(df_korea_economics, 'H202402 2024.1/2.6', '고용률(%)')
-df_korea_economics_3 = clean_data(df_korea_economics, 'H202403 2024.1/2.8', '실업률(%)')
+df_korea_economics_2 = clean_data(df_korea_economics, 'H202401 2024.1/2.6', '고용률(%)')
+df_korea_economics_3 = clean_data(df_korea_economics, 'H202401 2024.1/2.8', '실업률(%)')
 
 # GeoJSON 파일 경로 설정
 file_pattern = os.path.join('LARD_ADM_SECT_SGG_*.json')
