@@ -64,7 +64,7 @@ if option == '경제활동참가율(%)':
         df_korea_economics.columns = ['행정구', '경제활동참가율(％)']
         df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
         df_korea_economics.reset_index(drop=True, inplace=True)
-        df_korea_economics['경제활동참가율(%)'] = pd.to_numeric(df_korea_economics['경제활동참가율(%)'], errors='coerce').fillna(0)
+        df_korea_economics['경제활동참가율(%)'] = df_korea_economics['경제활동참가율(%)']fillna(0)
         st.dataframe(df_korea_economics, height=200)
 
     folium.Choropleth(
