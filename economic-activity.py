@@ -30,7 +30,7 @@ first_row_last_word = df_korea_economics.iloc[0, -1].split()[-1]
 df_korea_economics = df_korea_economics.drop(0)
 
 # T1, T2, T3, T4 열 제거
-columns_to_drop = [col for col in df_korea_economics.columns if col.startswith('T1') or col.startswith('T2') or col.startswith('T3') or col.startswith('T4')]
+columns_to_drop = [col for col in df_korea_economics.columns if col.startswith('T')]
 df_korea_economics = df_korea_economics.drop(columns=columns_to_drop)
 
 # CSV 파일 정제
