@@ -17,7 +17,7 @@ import glob
 st.sidebar.write('## 연도와 항목을 고르시오.') 
 # 연도 옵션 생성 
 years = list(range(2023,1999, -1)) 
-year_option = st.sidebar.selectbox('연도', 'years') 
+year_option = st.sidebar.selectbox('연도', years) 
 
 # 항목 옵션 생성 
 item_option = st.sidebar.selectbox('항목', ['경제활동참가율(%)', '고용률(%)', '실업률(%)']) 
