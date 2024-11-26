@@ -1,7 +1,7 @@
 import streamlit as st  # streamlit 라이브러리 임포트
 
 # 타이틀 텍스트 출력
-st.title('2000-2023 행정구역(시도) 별 경제활동인')
+st.title('2000-2023 행정구역(시도) 별 경제활동인구')
 
 st.write('.')
 
@@ -29,12 +29,27 @@ data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126
 df_korea_economics= pd.read_csv(data_path,header=1,encoding='utf-8')
 st.write("CSV 파일 열 이름:", df_korea_economics.columns.tolist())
 
-# 필요한 열만 선택
-df_korea_economics = df_korea_economics.iloc[:,[0,5]]
-# 데이터 정제
-df_korea_economics.columns = ['행정구', '경제활동참가율(%)']
+# 열 이름 정제 
+columns = ['행정구', '15세 이상 인구', '경제활동인구', '비경제활동인구', '경제활동참가율', '실업률', '고용률']
+for i in range(1, 24): 
+    columns += [f'15세 이상 인구.{i}', f'경제활동인구.{i}', f'비경제활동인구.{i}', f'경제활동참가율.{i}', f'실업률.{i}', f'고용률.{i}'] 
+
+df_korea_economics.columns = columns 
+
+# 선택한 연도에 해당하는 데이터 필터링 
+year_index = 2023 - year_option 
+selected_data = df_korea_economics.iloc[:, [0, year_index*6+1, year_index*6+2, year_index*6+3, year_index*6+4, year_index*6+5, year_index*6+6]] 
+
+# 선택한 항목에 따라 데이터 출력 
+if item_option == '경제활동참가율(%)': 
+    st.write(selected_data[['행정구', f'경제활동참가율.{year_index}']]) 
+elif item_option == '고용률(%)': 
+    st.write(selected_data[['행정구', f'고용률.{year_index}']]) 
+elif item_option == '실업률(%)': 
+    st.write(selected_data[['행정구', f'실업률.{year_index}']])
+
 df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
-df_korea_economics['경제활동참가율(%)'] = df_korea_economics['경제활동참가율(%)'].fillna(0)
+df_korea_economics[f'경제활동참가율(%).{year_index}'] = df_korea_economics[f'경제활동참가율(%).{year_index}'].fillna(0)
 
 st.dataframe(df_korea_economics, height=200)
 
@@ -60,7 +75,7 @@ korea_5179 = gdf_korea_sido.to_crs(epsg=5179)
 korea_map = folium.Map(location=[37, 126], zoom_start=7, tiles='cartodbpositron')
 
 # 제목 설정
-title = '전국 시도 경제활동참가율'
+title = '행정구역(시도별) 경제활동참가율'
 title_html = f'<h3 align="center" style="font-size:20px"><b>{title}</b></h3>'
 korea_map.get_root().html.add_child(folium.Element(title_html))
 
@@ -68,9 +83,9 @@ korea_map.get_root().html.add_child(folium.Element(title_html))
 folium.Choropleth(
     geo_data=gdf_korea_sido,
     data=df_korea_economics,
-    columns = ['행정구', '경제활동참가율(%)'],
+    columns = ['행정구', '경제활동인구'],
     key_on='feature.properties.행정구',
-    legend_name= '경제활동참가율(%)',
+    legend_name= item_option,
     fill_color='BuPu',
     fill_opacity=0.7,
     line_opacity=0.3
