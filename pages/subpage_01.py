@@ -14,7 +14,7 @@ import os
 import glob
 
 # 데이터 경로 설정
-data_path = os.path.abspath('전국_시군구_경제활동인구_총괄_20241121153501.csv')
+data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126130730.csv')
 # CSV 데이터 불러오기
 df_korea_economics= pd.read_csv(data_path,header=5,encoding='utf-8')
 
