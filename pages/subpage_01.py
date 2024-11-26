@@ -19,7 +19,7 @@ years = list(range(2023, 1999, -1))
 year_option = st.sidebar.selectbox('연도', years) 
 
 # 항목 옵션 생성 
-item_option = st.sidebar.selectbox('항목', ['경제활동참가율(%)', '고용률(%)', '실업률(%)']) 
+item_option = st.sidebar.selectbox('항목', ['15세 이상 인구','경제활동인구','비경제활동인구','경제활동참가율(%)', '실업률(%)', '고용률(%)']) 
 
 # 데이터 경로 설정
 data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126130730.csv')
