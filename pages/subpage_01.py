@@ -24,12 +24,6 @@ item_option = st.sidebar.selectbox('항목', ['경제활동참가율(%)', '고�
 st.write(f"선택된 연도: {year_option}") 
 st.write(f"선택된 항목: {item_option}")
 
-# 사이드바
-st.sidebar.write('## 연도와 항목을 고르시오.')
-option = st.sidebar.selectbox('연도', '2023'])
-
-st.write(f"선택된 항목: {option}")
-
 # 데이터 경로 설정
 data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126130730.csv')
 # CSV 데이터 불러오기
