@@ -19,7 +19,7 @@ data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126
 df_korea_economics= pd.read_csv(data_path,header=5,encoding='utf-8')
 
 # 필요한 열만 선택
-df_korea_economics = df_korea_economics.iloc[:,[0,6]]
+df_korea_economics = df_korea_economics.iloc[:,[0,5]]
 # 데이터 정제
 df_korea_economics.columns = ['행정구', '경제활동참가율(%)']
 df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
