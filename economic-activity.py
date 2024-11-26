@@ -8,8 +8,8 @@ import glob
 import numpy as np
 
 # 텍스트
-st.header('대한민국 경제 상황과') 
-st.header('전국 행정구역 경제활동 상관관계 분석')
+st.header('시간의 흐름에 따른') 
+st.header('전국 행정구역 경제활동참가율(%) 변화')
 
 # 사이드바
 st.sidebar.write('## 항목을 고르시오.')
