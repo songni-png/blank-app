@@ -33,7 +33,12 @@ st.write("CSV 파일 열 이름:", df_korea_economics.columns.tolist())
 columns = ['행정구', '15세 이상 인구', '경제활동인구', '비경제활동인구', '경제활동참가율', '실업률', '고용률']
 for i in range(1, 24): 
     columns += [f'15세 이상 인구.{i}', f'경제활동인구.{i}', f'비경제활동인구.{i}', f'경제활동참가율.{i}', f'실업률.{i}', f'고용률.{i}'] 
-df_korea_economics.columns = columns
+
+# 열 이름의 개수와 데이터프레임의 열 수가 일치하는지 확인 
+if len(columns) == len(df_korea_economics.columns): 
+    df_korea_economics.columns = columns 
+else: 
+    st.write("열 이름의 개수와 데이터프레임의 열 수가 일치하지 않습니다.")
 
 # 선택한 연도에 해당하는 데이터 필터링 
 year_index = 2023 - year_option 
