@@ -49,7 +49,7 @@ if item_option == '15세 이상 인구':
 elif item_option == '경제활동인구': 
     st.write(selected_data[['행정구', f'경제활동인구.{year_index}']])
 elif item_option == '비경제활동인구': 
-    st.write(selected_data[['행정구', f'비비경제활동인구.{year_index}']])
+    st.write(selected_data[['행정구', f'비경제활동인구.{year_index}']])
 elif item_option == '경제활동참가율(%)': 
     st.write(selected_data[['행정구', f'경제활동참가율(%).{year_index}']])
 elif item_option == '고용률(%)': 
@@ -63,7 +63,7 @@ df_korea_economics[f'경제활동인구.{year_index}'] = df_korea_economics[f'�
 df_korea_economics[f'비경제활동인구.{year_index}'] = df_korea_economics[f'비경제활동인구.{year_index}'].fillna(0)
 df_korea_economics[f'경제활동참가율(%).{year_index}'] = df_korea_economics[f'경제활동참가율(%).{year_index}'].fillna(0)
 df_korea_economics[f'고용률(%).{year_index}'] = df_korea_economics[f'고용률(%).{year_index}'].fillna(0)
-df_korea_economics[f'실업률(%).{year_index}'] = df_korea_economics[f'실업률률(%).{year_index}'].fillna(0)
+df_korea_economics[f'실업률(%).{year_index}'] = df_korea_economics[f'실업률(%).{year_index}'].fillna(0)
 
 st.dataframe(df_korea_economics, height=200)
 
@@ -98,7 +98,7 @@ folium.Choropleth(
     data=df_korea_economics,
     columns=['행정구', '경제활동인구'],
     key_on='feature.properties.행정구',
-    legend_name=f'item_option.{year_index}',
+    legend_name=item_option,
     fill_color='BuPu',
     fill_opacity=0.7,
     line_opacity=0.3
@@ -109,4 +109,3 @@ st.markdown(title_html, unsafe_allow_html=True)
 
 # Folium 지도 출력
 folium_static(korea_map)
-
