@@ -1,9 +1,9 @@
 import streamlit as st  # streamlit 라이브러리 임포트
 
 # 타이틀 텍스트 출력
-st.title('경제성장률')
+st.title('2000-2023 행정구역(시도) 별 경제활동인')
 
-st.write('물가상승률')
+st.write('.')
 
 import streamlit as st
 import pandas as pd
