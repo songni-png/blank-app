@@ -30,6 +30,7 @@ df_korea_economics= pd.read_csv(data_path,header=1,encoding='utf-8')
 st.write("CSV 파일 열 이름:", df_korea_economics.columns.tolist())
 
 # 열 이름 정제 
+df_korea_economics = df_korea_economics.iloc[0:6]]
 df_korea_economics.columns = ['행정구', '15세 이상 인구', '경제활동인구', '비경제활동인구', '경제활동참가율', '실업률', '고용률']
 for i in range(1, 24): 
     columns += [f'15세 이상 인구.{i}', f'경제활동인구.{i}', f'비경제활동인구.{i}', f'경제활동참가율.{i}', f'실업률.{i}', f'고용률.{i}'] 
