@@ -31,7 +31,7 @@ st.write("CSV 파일 열 이름:", df_korea_economics.columns.tolist())
 
 # 열 이름 정제 
 columns = ['행정구', '15세 이상 인구', '경제활동인구', '비경제활동인구', '경제활동참가율', '실업률', '고용률']
-for i in range(1, 24): 
+for i in range(1, 28): 
     columns += [f'15세 이상 인구.{i}', f'경제활동인구.{i}', f'비경제활동인구.{i}', f'경제활동참가율.{i}', f'실업률.{i}', f'고용률.{i}'] 
 
 # 열 이름의 개수와 데이터프레임의 열 수가 일치하는지 확인 
@@ -42,7 +42,7 @@ else:
 
 # 선택한 연도에 해당하는 데이터 필터링 
 year_index = 2023 - year_option 
-selected_data = df_korea_economics.iloc[:, [0, year_index*6+1, year_index*6+2, year_index*6+3, year_index*6+4, year_index*6+5, year_index*6+6]] 
+selected_data = df_korea_economics.iloc[:, [0, year_index*6+1, year_index*6+2, year_index*6+3, year_index*6+4, year_index*6+5,year_index*6+6]] 
 
 # 선택한 항목에 따라 데이터 출력 
 if item_option == '경제활동참가율(%)': 
