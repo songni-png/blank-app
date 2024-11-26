@@ -49,17 +49,14 @@ korea_5179 = gdf_korea_sido.to_crs(epsg=5179)
 korea_map = folium.Map(location=[37, 126], zoom_start=7, tiles='cartodbpositron')
 
 # 제목 설정
-title = '전국 시군구 경제활동참가율'
+title = '전국 시도도 경제활동참가율'
 title_html = f'<h3 align="center" style="font-size:20px"><b>{title}</b></h3>'
 korea_map.get_root().html.add_child(folium.Element(title_html))
 
 # Choropleth map
 folium.Choropleth(
     geo_data=gdf_korea_sido,
-    data=df_korea_economics,
-    columns=['행정구', '경제활동참가율(%)'],
-    key_on='feature.properties.행정구',
-    legend_name = '전국 시군구 경제활동참가율(%)',
+    data=d도 경제활동참가율(%)',
     fill_color='BuPu',
     fill_opacity=0.7,
     line_opacity=0.3
