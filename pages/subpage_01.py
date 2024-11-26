@@ -21,8 +21,6 @@ year_option = st.sidebar.selectbox('연도', years)
 
 # 항목 옵션 생성 
 item_option = st.sidebar.selectbox('항목', ['경제활동참가율(%)', '고용률(%)', '실업률(%)']) 
-st.write(f"선택된 연도: {year_option}") 
-st.write(f"선택된 항목: {item_option}")
 
 # 데이터 경로 설정
 data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126130730.csv')
