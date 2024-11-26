@@ -29,9 +29,9 @@ df_korea_economics = pd.read_csv(data_path, header=1, encoding='utf-8')
 st.write("CSV 파일 열 이름:", df_korea_economics.columns.tolist())
 
 # 열 이름 정제
-columns = ['행정구', '15세 이상 인구', '경제활동인구', '비경제활동인구', '경제활동참가율', '실업률', '고용률']
+columns = ['행정구', '15세 이상 인구', '경제활동인구', '비경제활동인구', '경제활동참가율(%)', '실업률(%)', '고용률(%)']
 for i in range(1, 24): 
-    columns += [f'15세 이상 인구.{i}', f'경제활동인구.{i}', f'비경제활동인구.{i}', f'경제활동참가율.{i}', f'실업률.{i}', f'고용률.{i}']
+    columns += [f'15세 이상 인구.{i}', f'경제활동인구.{i}', f'비경제활동인구.{i}', f'경제활동참가율(%).{i}', f'실업률(%).{i}', f'고용률(%).{i}']
 
 # 열 이름의 개수와 데이터프레임의 열 수가 일치하는지 확인
 if len(columns) == len(df_korea_economics.columns):
@@ -44,15 +44,26 @@ year_index = 2023 - year_option
 selected_data = df_korea_economics.iloc[:, [0, year_index*6+1, year_index*6+2, year_index*6+3, year_index*6+4, year_index*6+5, year_index*6+6]]
 
 # 선택한 항목에 따라 데이터 출력
-if item_option == '경제활동참가율(%)': 
-    st.write(selected_data[['행정구', f'경제활동참가율.{year_index}']]) 
+if item_option == '15세 이상 인구': 
+    st.write(selected_data[['행정구', f'15세 이상 인구.{year_index}']]) 
+elif item_option == '경제활동인구': 
+    st.write(selected_data[['행정구', f'경제활동인구.{year_index}']])
+elif item_option == '비경제활동인구': 
+    st.write(selected_data[['행정구', f'비비경제활동인구.{year_index}']])
+elif item_option == '경제활동참가율(%)': 
+    st.write(selected_data[['행정구', f'경제활동참가율(%).{year_index}']])
 elif item_option == '고용률(%)': 
     st.write(selected_data[['행정구', f'고용률.{year_index}']]) 
 elif item_option == '실업률(%)': 
     st.write(selected_data[['행정구', f'실업률.{year_index}']])
 
 df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
+df_korea_economics[f'15세 이상 인구.{year_index}'] = df_korea_economics[f'15세 이상 인구.{year_index}'].fillna(0)
+df_korea_economics[f'경제활동인구.{year_index}'] = df_korea_economics[f'경제활동인구.{year_index}'].fillna(0)
+df_korea_economics[f'비경제활동인구.{year_index}'] = df_korea_economics[f'비경제활동인구.{year_index}'].fillna(0)
 df_korea_economics[f'경제활동참가율(%).{year_index}'] = df_korea_economics[f'경제활동참가율(%).{year_index}'].fillna(0)
+df_korea_economics[f'고용률(%).{year_index}'] = df_korea_economics[f'고용률(%).{year_index}'].fillna(0)
+df_korea_economics[f'실업률(%).{year_index}'] = df_korea_economics[f'실업률률(%).{year_index}'].fillna(0)
 
 st.dataframe(df_korea_economics, height=200)
 
@@ -87,7 +98,7 @@ folium.Choropleth(
     data=df_korea_economics,
     columns=['행정구', '경제활동인구'],
     key_on='feature.properties.행정구',
-    legend_name=item_option,
+    legend_name=f'item_option.{year_index}',
     fill_color='BuPu',
     fill_opacity=0.7,
     line_opacity=0.3
