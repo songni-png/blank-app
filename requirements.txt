@@ -8,3 +8,5 @@ shapely
 streamlit-elements
 numpy
 altair
+plotly.express
+json
