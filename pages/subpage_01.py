@@ -171,13 +171,13 @@ def make_donut(input_response, input_text, input_color):
   ).properties(width=130, height=130)
   return plot_bg + plot + text # 백그라운드, 차트, 텍스트를 합쳐서 그래프 생성
 
+# Convert population to text 
 def format_number(num):
-    if num > 200:
-        if not num % 200:
-            return f'{num // 200} M'
-        return f'{round(num / 200,1)}M'
-    return f'{num // 20} K'
-format_number(200)
+    if num > 1000000:
+        if not num % 1000000:
+            return f'{num // 1000000} M'
+        return f'{round(num / 1000000, 1)} M'
+    return f'{num // 1000} K'
 
 def calculate_population_difference(input_df_korea_economics, input_year, input_category):
   selected_year_data = input_df_korea_economics.query('year == @input_year & category == @input_category').reset_index()
@@ -193,7 +193,7 @@ def calculate_population_difference(input_df_korea_economics, input_year, input_
     ], axis=1).sort_values(by='population_difference', ascending=False)
 
 # 대시보드 레이아웃
-col = st.columns((1.5, 4.5, 2.5), gap='large')
+col = st.columns((2, 5, 4), gap='large')
 
 with col[0]: # 왼쪽
     st.markdown('#### 증가/감소')
