@@ -21,6 +21,9 @@ data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126
 # CSV 데이터 불러오기
 df_korea_economics = pd.read_csv(data_path, header=1, encoding='utf-8')
 
+# GeoJSON 파일 경로 설정
+file_pattern = os.path.join('LARD_ADM_SECT_SGG_*.json')
+file_list = glob.glob(file_pattern)
 # GeoDataFrame 생성
 gdfs = [gpd.read_file(file) for file in file_list]
 korea_geojson = gpd.GeoDataFrame(pd.concat(gdfs, ignore_index=True))
