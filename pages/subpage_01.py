@@ -58,6 +58,12 @@ year_list = list(df_korea_economics.year.unique())[::-1]
 year_list = [np.int64(year) for year in year_list]
 # 연도 리스트를 내림차순으로 정렬
 category_list = list(df_korea_economics.category.unique())[::-1]
+# query 함수를 사용하여 데이터 추출
+year = 2015
+target = '경제활동인구'
+ # 2015년 15세이상인구만 추출
+df_korea_economics.query('year == @year & category == @target')
+
 # 사이드바 설정
 
 with st.sidebar:
