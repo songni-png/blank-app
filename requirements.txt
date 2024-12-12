@@ -9,4 +9,4 @@ streamlit-elements
 numpy
 altair
 plotly
-json
+simplejson
