@@ -52,6 +52,12 @@ df_korea_economics = df_korea_economics[['city','code','year','category','popula
 
 df_korea_economics
 
+# 연도 리스트를 내림차순으로 정렬
+year_list = list(df_korea_economics.year.unique())[::-1]
+# NumPy 배열로 변환 
+year_list = [np.int64(year) for year in year_list]
+# 연도 리스트를 내림차순으로 정렬
+category_list = list(df_korea_economics.category.unique())[::-1]
 # 사이드바 설정
 
 with st.sidebar:
