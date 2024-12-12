@@ -15,11 +15,11 @@ st.write('.')
 # 사이드바
 st.sidebar.write('## 연도와 항목을 고르시오.') 
 
-# CSV 데이터 불러오기
-df_korea_economics = pd.read_csv(data_path, header=1, encoding='utf-8')
-
 # 데이터 경로 설정
 data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126130730.csv')
+
+# CSV 데이터 불러오기
+df_korea_economics = pd.read_csv(data_path, header=1, encoding='utf-8')
 
 # GeoDataFrame 생성
 gdfs = [gpd.read_file(file) for file in file_list]
