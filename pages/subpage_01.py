@@ -95,7 +95,94 @@ def make_heatmap(input_df, input_y, input_x, input_color, input_color_theme):
     # height=300
     return heatmap
 
+# Choropleth map
+def make_choropleth(input_df, input_gj, input_column, input_color_theme):
+    choropleth = px.choropleth_mapbox(input_df,
+                               geojson=input_gj,
+                               locations='code', 
+                               featureidkey='properties.CTPRVN_CD',
+                               mapbox_style='carto-darkmatter',
+                               zoom=5, 
+                               center = {"lat": 35.9, "lon": 126.98},
+                               color=input_column, 
+                               color_continuous_scale=input_color_theme,
+                               range_color=(0, max(input_df.population)),
+                               labels={'population':'인구수', 'code':'시도코드', 'city':'시도명'},
+                               hover_data=['city', 'population']
+                              )
+    choropleth.update_geos(fitbounds="locations", visible=False)
+    choropleth.update_layout(
+        template='plotly_dark',
+        plot_bgcolor='rgba(0, 0, 0, 0)',
+        paper_bgcolor='rgba(0, 0, 0, 0)',
+        margin=dict(l=0, r=0, t=0, b=0),
+        height=350
+    )
+    return choropleth
 
+# 도넛 차트
+def make_donut(input_response, input_text, input_color):
+  if input_color == 'blue':
+      chart_color = ['#29b5e8', '#155F7A']
+  if input_color == 'green':
+      chart_color = ['#27AE60', '#12783D']
+  if input_color == 'orange':
+      chart_color = ['#F39C12', '#875A12']
+  if input_color == 'red':
+      chart_color = ['#E74C3C', '#781F16']
+    
+  source = pd.DataFrame({
+      "Topic": ['', input_text],
+      "% value": [100-input_response, input_response]
+  })
+  source_bg = pd.DataFrame({
+      "Topic": ['', input_text],
+      "% value": [100, 0]
+  })
+    
+  plot = alt.Chart(source).mark_arc(innerRadius=45, cornerRadius=25).encode(
+      theta="% value",
+      color= alt.Color("Topic:N",
+                      scale=alt.Scale(
+                          #domain=['A', 'B'],
+                          domain=[input_text, ''],
+                          # range=['#29b5e8', '#155F7A']),  # 31333F
+                          range=chart_color),
+                      legend=None),
+  ).properties(width=130, height=130)
+    
+  text = plot.mark_text(align='center', color="#29b5e8", font="Lato", fontSize=32, fontWeight=700, fontStyle="italic").encode(text=alt.value(f'{input_response} %'))
+  plot_bg = alt.Chart(source_bg).mark_arc(innerRadius=45, cornerRadius=20).encode(
+      theta="% value",
+      color= alt.Color("Topic:N",
+                      scale=alt.Scale(
+                          # domain=['A', 'B'],
+                          domain=[input_text, ''],
+                          range=chart_color),  # 31333F
+                      legend=None),
+  ).properties(width=130, height=130)
+  return plot_bg + plot + text # 백그라운드, 차트, 텍스트를 합쳐서 그래프 생성
+
+def format_number(num):
+    if num > 200:
+        if not num % 200:
+            return f'{num // 200} M'
+        return f'{round(num / 200,1)}M'
+    return f'{num // 20} K'
+format_number(200)
+
+def calculate_population_difference(input_df_korea_economics, input_year, input_category):
+  selected_year_data = input_df_korea_economics.query('year == @input_year & category == @input_category').reset_index()
+  previous_year_data = input_df_korea_economics.query('year == @input_year-1 & category == @input_category').reset_index()
+  selected_year_data['population_difference'] = selected_year_data['population'].sub(previous_year_data['population'], fill_value=0)
+  selected_year_data['population_difference_abs'] = abs(selected_year_data['population_difference'])
+  return pd.concat([
+    selected_year_data['city'], 
+    selected_year_data['code'], 
+    selected_year_data['population'], 
+    selected_year_data['population_difference'], 
+    selected_year_data['population_difference_abs']
+    ], axis=1).sort_values(by='population_difference', ascending=False)
 
 # 대시보드 레이아웃
 col = st.columns((1.5, 4.5, 2), gap='medium')
@@ -103,7 +190,7 @@ col = st.columns((1.5, 4.5, 2), gap='medium')
 with col[0]: # 왼쪽
     st.markdown('#### 증가/감소')
 
-    df_population_difference_sorted = calculate_population_difference(df, selected_year, selected_category)
+    df_population_difference_sorted = calculate_population_difference(df_korea_economics, selected_year, selected_category)
 
     if selected_year > 2014:
         first_state_name = df_population_difference_sorted.city.iloc[0]
@@ -131,8 +218,8 @@ with col[0]: # 왼쪽
     if selected_year > 2014:
         # Filter states with population difference > 5000
         # df_greater_50000 = df_population_difference_sorted[df_population_difference_sorted.population_difference_absolute > 50000]
-        df_greater_5000 = df_population_difference_sorted[df_population_difference_sorted.population_difference > 5000]
-        df_less_5000 = df_population_difference_sorted[df_population_difference_sorted.population_difference < -5000]
+        df_greater_20 = df_population_difference_sorted[df_population_difference_sorted.population_difference > 20]
+        df_less_20 = df_population_difference_sorted[df_population_difference_sorted.population_difference < -20]
         
         # % of States with population difference > 5000
         states_migration_greater = round((len(df_greater_5000)/df_population_difference_sorted.city.nunique())*100)
@@ -158,7 +245,7 @@ with col[1]:
     choropleth = make_choropleth(df_selected_year, korea_geojson, 'population', selected_color_theme)
     st.plotly_chart(choropleth, use_container_width=True)
     
-    heatmap = make_heatmap(df, 'year', 'city', 'population', selected_color_theme)
+    heatmap = make_heatmap(df_korea_economics, 'year', 'city', 'population', selected_color_theme)
     st.altair_chart(heatmap, use_container_width=True)
     
 
