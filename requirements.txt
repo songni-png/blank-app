@@ -6,4 +6,5 @@ streamlit-folium
 fiona
 shapely
 streamlit-elements
-
+numpy
+altair
