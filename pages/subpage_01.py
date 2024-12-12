@@ -14,12 +14,6 @@ import glob
 
 # 사이드바
 st.sidebar.write('## 연도와 항목을 고르시오.') 
-# 연도 옵션 생성 
-years = list(range(2023, 1999, -1)) 
-year_option = st.sidebar.selectbox('연도', years) 
-
-# 항목 옵션 생성 
-item_option = st.sidebar.selectbox('항목', ['15세 이상 인구','경제활동인구','비경제활동인구','경제활동참가율(%)', '실업률(%)', '고용률(%)']) 
 
 # 데이터 경로 설정
 data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126130730.csv')
@@ -28,44 +22,35 @@ data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126
 df_korea_economics = pd.read_csv(data_path, header=1, encoding='utf-8')
 st.write("CSV 파일 열 이름:", df_korea_economics.columns.tolist())
 
-# 열 이름 정제
-columns = ['행정구', '15세 이상 인구', '경제활동인구', '비경제활동인구', '경제활동참가율(%)', '실업률(%)', '고용률(%)']
-for i in range(1, 24): 
-    columns += [f'15세 이상 인구.{i}', f'경제활동인구.{i}', f'비경제활동인구.{i}', f'경제활동참가율(%).{i}', f'실업률(%).{i}', f'고용률(%).{i}']
+# 숫자와 문자를 분리하는 코드 
+df_korea_economics[['code', 'city']] = df_korea_economics['A 시도별(1)'].str.extract(r'(\d+)\s*(.*)')
 
-# 열 이름의 개수와 데이터프레임의 열 수가 일치하는지 확인
-if len(columns) == len(df_korea_economics.columns):
-    df_korea_economics.columns = columns
-else:
-    st.write("열 이름의 개수와 데이터프레임의 열 수가 일치하지 않습니다.")
+df_korea_economics.drop('A 시도별(1)',axis=1,inplace=True)
 
-# 선택한 연도에 해당하는 데이터 필터링
-year_index = 2023 - year_option
-selected_data = df_korea_economics.iloc[:, [0, year_index*6+1, year_index*6+2, year_index*6+3, year_index*6+4, year_index*6+5, year_index*6+6]]
+# 데이터를 멜팅하여 데이터프레임으로 변환
+df_korea_economics = df_korea_economics.melt(
+                     id_vars = ['city','code'],
+                     var_name = 'property',
+                     value_name = 'population',
+)
+# 연도 리스트 생성 
+years = [] 
+for i in range(2023, 1999, -1): 
+    years.extend([i] * 126) 
+years = years[:len(df_korea_economics)] 
+# 'property' 열을 'year'와 'category' 열로 분리 
+df_korea_economics['year'] = years 
+df_korea_economics['category'] = df_korea_economics['property'].str.extract(r'^\D*\d+\s*(.*)')[0] 
+# 'category' 열에서 '(' 이후 부분 제거 
+df_korea_economics['category'] = df_korea_economics['category'].str.split('(').str[0].str.strip() 
+# 'property' 열 삭제 
+df_korea_economics.drop('property', axis=1, inplace=True) 
+# 'population' 열을 정수로 변환
+df_korea_economics['population'] = df_korea_economics['population'].replace('-','0').fillna('0').astype(float)
+# 열 순서 변경
+df_korea_economics = df_korea_economics[['city','code','year','category','population']]
 
-# 선택한 항목에 따라 데이터 출력
-if item_option == '15세 이상 인구': 
-    st.write(selected_data[['행정구', f'15세 이상 인구.{year_index}']]) 
-elif item_option == '경제활동인구': 
-    st.write(selected_data[['행정구', f'경제활동인구.{year_index}']])
-elif item_option == '비경제활동인구': 
-    st.write(selected_data[['행정구', f'비경제활동인구.{year_index}']])
-elif item_option == '경제활동참가율(%)': 
-    st.write(selected_data[['행정구', f'경제활동참가율(%).{year_index}']])
-elif item_option == '고용률(%)': 
-    st.write(selected_data[['행정구', f'고용률.{year_index}']]) 
-elif item_option == '실업률(%)': 
-    st.write(selected_data[['행정구', f'실업률.{year_index}']])
-
-df_korea_economics['행정구'] = df_korea_economics['행정구'].str.replace('\d+', '', regex=True).str.strip()
-df_korea_economics[f'15세 이상 인구.{year_index}'] = df_korea_economics[f'15세 이상 인구.{year_index}'].fillna(0)
-df_korea_economics[f'경제활동인구.{year_index}'] = df_korea_economics[f'경제활동인구.{year_index}'].fillna(0)
-df_korea_economics[f'비경제활동인구.{year_index}'] = df_korea_economics[f'비경제활동인구.{year_index}'].fillna(0)
-df_korea_economics[f'경제활동참가율(%).{year_index}'] = df_korea_economics[f'경제활동참가율(%).{year_index}'].fillna(0)
-df_korea_economics[f'고용률(%).{year_index}'] = df_korea_economics[f'고용률(%).{year_index}'].fillna(0)
-df_korea_economics[f'실업률(%).{year_index}'] = df_korea_economics[f'실업률(%).{year_index}'].fillna(0)
-
-st.dataframe(df_korea_economics, height=200)
+df_korea_economics
 
 # GeoJSON 파일 경로 설정
 file_pattern = os.path.join('LARD_ADM_SECT_SGG_*.json')
