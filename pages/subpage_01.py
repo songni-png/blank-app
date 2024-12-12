@@ -193,7 +193,7 @@ def calculate_population_difference(input_df_korea_economics, input_year, input_
     ], axis=1).sort_values(by='population_difference', ascending=False)
 
 # 대시보드 레이아웃
-col = st.columns((1.5, 4.5, 2.5), gap='medium')
+col = st.columns((1.5, 4.5, 2.5), gap='large')
 
 with col[0]: # 왼쪽
     st.markdown('#### 증가/감소')
@@ -230,8 +230,8 @@ with col[0]: # 왼쪽
         df_less_20 = df_population_difference_sorted[df_population_difference_sorted.population_difference < -20]
         
         # % of States with population difference > 5000
-        states_migration_greater = round((len(df_greater_5000)/df_population_difference_sorted.city.nunique())*100)
-        states_migration_less = round((len(df_less_5000)/df_population_difference_sorted.city.nunique())*100)
+        states_migration_greater = round((len(df_greater_20)/df_population_difference_sorted.city.nunique())*100)
+        states_migration_less = round((len(df_less_20)/df_population_difference_sorted.city.nunique())*100)
         donut_chart_greater = make_donut(states_migration_greater, '전입', 'green')
         donut_chart_less = make_donut(states_migration_less, '전출', 'red')
     else:
