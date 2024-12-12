@@ -193,7 +193,7 @@ def calculate_population_difference(input_df_korea_economics, input_year, input_
     ], axis=1).sort_values(by='population_difference', ascending=False)
 
 # 대시보드 레이아웃
-col = st.columns((1, 4.5, 6), gap='medium')
+col = st.columns((1.5, 4.5, 2.5), gap='medium')
 
 with col[0]: # 왼쪽
     st.markdown('#### 증가/감소')
@@ -240,7 +240,7 @@ with col[0]: # 왼쪽
         donut_chart_greater = make_donut(states_migration_greater, '전입', 'green')
         donut_chart_less = make_donut(states_migration_less, '전출', 'red')
 
-    migrations_col = st.columns((0.2, 1, 0.2))
+    migrations_col = st.columns((0.5, 2, 0.5))
     with migrations_col[1]:
         st.write('증가')
         st.altair_chart(donut_chart_greater)
