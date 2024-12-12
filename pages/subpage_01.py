@@ -58,16 +58,10 @@ year_list = list(df_korea_economics.year.unique())[::-1]
 year_list = [np.int64(year) for year in year_list]
 # 연도 리스트를 내림차순으로 정렬
 category_list = list(df_korea_economics.category.unique())[::-1]
-# query 함수를 사용하여 데이터 추출
-year = 2015
-target = '경제활동인구'
- # 2015년 15세이상인구만 추출
-df_korea_economics.query('year == @year & category == @target')
 
 # 사이드바 설정
-
 with st.sidebar:
-    st.title('🏂 대한민국 경제활동인구 대시보드')
+    st.title('대한민국 경제활동인구 대시보드')
     
     year_list = list(df_korea_economics.year.unique())[::-1]  # 연도 리스트를 내림차순으로 정렬
     category_list = list(df_korea_economics.category.unique())  # 카테고리 리스트
@@ -112,7 +106,7 @@ folium.Choropleth(
     data=df_korea_economics,
     columns=['행정구', '경제활동인구'],
     key_on='feature.properties.행정구',
-    legend_name=item_option,
+    legend_name='경제활동인구',
     fill_color='BuPu',
     fill_opacity=0.7,
     line_opacity=0.3
