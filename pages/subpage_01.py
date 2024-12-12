@@ -1,16 +1,17 @@
-import streamlit as st  # streamlit 라이브러리 임포트
-
-# 타이틀 텍스트 출력
-st.title('2000-2023 행정구역(시도) 별 경제활동인구')
-
-st.write('.')
-
+# 라이브러리 임포트
+import streamlit as st
 import pandas as pd
+import numpy as np
+import altair as alt
 import folium
 from streamlit_folium import folium_static
 import geopandas as gpd
 import os
 import glob
+# 타이틀 텍스트 출력
+st.title('2000-2023 행정구역(시도) 별 경제활동인구')
+
+st.write('.')
 
 # 사이드바
 st.sidebar.write('## 연도와 항목을 고르시오.') 
@@ -20,7 +21,6 @@ data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126
 
 # CSV 데이터 불러오기
 df_korea_economics = pd.read_csv(data_path, header=1, encoding='utf-8')
-st.write("CSV 파일 열 이름:", df_korea_economics.columns.tolist())
 
 # 숫자와 문자를 분리하는 코드 
 df_korea_economics[['code', 'city']] = df_korea_economics['A 시도별(1)'].str.extract(r'(\d+)\s*(.*)')
@@ -51,6 +51,23 @@ df_korea_economics['population'] = df_korea_economics['population'].replace('-',
 df_korea_economics = df_korea_economics[['city','code','year','category','population']]
 
 df_korea_economics
+
+# 사이드바 설정
+
+with st.sidebar:
+    st.title('🏂 대한민국 경제활동인구 대시보드')
+    
+    year_list = list(df.year.unique())[::-1]  # 연도 리스트를 내림차순으로 정렬
+    category_list = list(df.category.unique())  # 카테고리 리스트
+    
+    selected_year = st.selectbox('연도 선택', year_list) # selectbox에서 연도 선택
+    selected_category = st.selectbox('카테고리 선택', category_list) # selectbox에서 카테고리 선택
+
+    df_selected_year = df.query('year == @selected_year & category == @selected_category') # 선택한 연도와 카테고리에 해당하는 데이터만 가져오기
+    df_selected_year_sorted = df_selected_year.sort_values(by="population", ascending=False) # 선택한 연도와 카테고리에 해당하는 데이터를 인구수를 기준으로 내림차순 정렬
+
+    color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
+    selected_color_theme = st.selectbox('컬러 테마 선택', color_theme_list)
 
 # GeoJSON 파일 경로 설정
 file_pattern = os.path.join('LARD_ADM_SECT_SGG_*.json')
