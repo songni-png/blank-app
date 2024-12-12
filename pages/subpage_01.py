@@ -193,7 +193,7 @@ def calculate_population_difference(input_df_korea_economics, input_year, input_
     ], axis=1).sort_values(by='population_difference', ascending=False)
 
 # 대시보드 레이아웃
-col = st.columns((3.5, 7, 4.5), gap='large')
+col = st.columns((3, 6.5, 4.5), gap='large')
 
 with col[0]: # 왼쪽
     st.markdown('#### 증가/감소')
