@@ -3,9 +3,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
-import folium
-from streamlit_folium import folium_static
-import geopandas as gpd
+import plotly.express as px
+import json
 import os
 import glob
 # 타이틀 텍스트 출력
@@ -97,45 +96,87 @@ def make_heatmap(input_df, input_y, input_x, input_color, input_color_theme):
     return heatmap
 
 
-# GeoJSON 파일 경로 설정
-file_pattern = os.path.join('LARD_ADM_SECT_SGG_*.json')
-file_list = glob.glob(file_pattern)
 
-if not file_list:
-    raise FileNotFoundError(f"GeoJSON 파일을 찾을 수 없습니다: {file_pattern}")
+# 대시보드 레이아웃
+col = st.columns((1.5, 4.5, 2), gap='medium')
 
-# GeoDataFrame 생성
-gdfs = [gpd.read_file(file) for file in file_list]
-gdf_korea_sido = gpd.GeoDataFrame(pd.concat(gdfs, ignore_index=True))
+with col[0]: # 왼쪽
+    st.markdown('#### 증가/감소')
 
-# 'SGG_NM' 정제
-gdf_korea_sido['행정구'] = gdf_korea_sido['SGG_NM'].str.split().str[1:].str.join(' ')
+    df_population_difference_sorted = calculate_population_difference(df, selected_year, selected_category)
 
-# 좌표계 변경
-korea_5179 = gdf_korea_sido.to_crs(epsg=5179)
+    if selected_year > 2014:
+        first_state_name = df_population_difference_sorted.city.iloc[0]
+        first_state_population = format_number(df_population_difference_sorted.population.iloc[0])
+        first_state_delta = format_number(df_population_difference_sorted.population_difference.iloc[0])
+    else:
+        first_state_name = '-'
+        first_state_population = '-'
+        first_state_delta = ''
+    st.metric(label=first_state_name, value=first_state_population, delta=first_state_delta)
 
-# 기본 지도 생성
-korea_map = folium.Map(location=[37, 126], zoom_start=7, tiles='cartodbpositron')
+    if selected_year > 2014:
+        last_state_name = df_population_difference_sorted.city.iloc[-1]
+        last_state_population = format_number(df_population_difference_sorted.population.iloc[-1])   
+        last_state_delta = format_number(df_population_difference_sorted.population_difference.iloc[-1])   
+    else:
+        last_state_name = '-'
+        last_state_population = '-'
+        last_state_delta = ''
+    st.metric(label=last_state_name, value=last_state_population, delta=last_state_delta)
 
-# 제목 설정
-title = '행정구역(시도별) 경제활동참가율'
-title_html = f'<h3 align="center" style="font-size:20px"><b>{title}</b></h3>'
-korea_map.get_root().html.add_child(folium.Element(title_html))
+    
+    st.markdown('#### 변동 시도 비율')
 
-# Choropleth map
-folium.Choropleth(
-    geo_data=gdf_korea_sido,
-    data=df_korea_economics,
-    columns=['행정구', '경제활동인구'],
-    key_on='feature.properties.행정구',
-    legend_name='경제활동인구',
-    fill_color='BuPu',
-    fill_opacity=0.7,
-    line_opacity=0.3
-).add_to(korea_map)
+    if selected_year > 2014:
+        # Filter states with population difference > 5000
+        # df_greater_50000 = df_population_difference_sorted[df_population_difference_sorted.population_difference_absolute > 50000]
+        df_greater_5000 = df_population_difference_sorted[df_population_difference_sorted.population_difference > 5000]
+        df_less_5000 = df_population_difference_sorted[df_population_difference_sorted.population_difference < -5000]
+        
+        # % of States with population difference > 5000
+        states_migration_greater = round((len(df_greater_5000)/df_population_difference_sorted.city.nunique())*100)
+        states_migration_less = round((len(df_less_5000)/df_population_difference_sorted.city.nunique())*100)
+        donut_chart_greater = make_donut(states_migration_greater, '전입', 'green')
+        donut_chart_less = make_donut(states_migration_less, '전출', 'red')
+    else:
+        states_migration_greater = 0
+        states_migration_less = 0
+        donut_chart_greater = make_donut(states_migration_greater, '전입', 'green')
+        donut_chart_less = make_donut(states_migration_less, '전출', 'red')
 
-# Streamlit 설정
-st.markdown(title_html, unsafe_allow_html=True)
+    migrations_col = st.columns((0.2, 1, 0.2))
+    with migrations_col[1]:
+        st.write('증가')
+        st.altair_chart(donut_chart_greater)
+        st.write('감소')
+        st.altair_chart(donut_chart_less)
 
-# Folium 지도 출력
-folium_static(korea_map)
+with col[1]:
+    st.markdown('#### ' + str(selected_year) + '년 ' + str(selected_category))
+    
+    choropleth = make_choropleth(df_selected_year, korea_geojson, 'population', selected_color_theme)
+    st.plotly_chart(choropleth, use_container_width=True)
+    
+    heatmap = make_heatmap(df, 'year', 'city', 'population', selected_color_theme)
+    st.altair_chart(heatmap, use_container_width=True)
+    
+
+with col[2]:
+    st.markdown('#### 시도별 ' + str(selected_category))
+
+    st.dataframe(df_selected_year_sorted,
+                 column_order=("city", "population"),
+                 hide_index=True,
+                 width=500,
+                 column_config={
+                    "city": st.column_config.TextColumn(
+                        "시도명",
+                    ),
+                    "population": st.column_config.ProgressColumn(
+                        str(selected_category),
+                        format="%f",
+                        min_value=0,
+                        max_value=max(df_selected_year_sorted.population),
+                     )}
+                 )
