@@ -114,7 +114,7 @@ def make_choropleth(input_df_korea_economics, input_gj, input_column, input_colo
                                center = {"lat": 35.9, "lon": 126.98},
                                color=input_column, 
                                color_continuous_scale=input_color_theme,
-                               range_color=(0, max(input_df.population)),
+                               range_color=(0, max(input_df_korea_economics.population)),
                                labels={'population':'인구수', 'code':'시도코드', 'city':'시도명'},
                                hover_data=['city', 'population']
                               )
