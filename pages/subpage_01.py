@@ -185,11 +185,11 @@ def make_donut(input_response, input_text, input_color):
 
 # Convert population to text 
 def format_number(num):
-    if num > 10000:
-        if not num % 10000:
-            return f'{num // 10000} M'
-        return f'{round(num / 10000, 1)} M'
-    return f'{num // 10} K'
+    if num > 1000000:
+        if not num % 1000000:
+            return f'{num // 1000000} M'
+        return f'{round(num / 1000000, 1)} M'
+    return f'{num // 1000} K'
 
 # Calculate population difference 
 def calculate_population_difference(input_df_korea_economics, input_year, input_category): 
@@ -201,10 +201,12 @@ def calculate_population_difference(input_df_korea_economics, input_year, input_
         selected_year_data['population_difference_abs'] = abs(selected_year_data['population_difference']) 
     
     else: selected_year_data['population_difference'] = 0 
+          selected_year_data['population_difference_abs'] = 0
     return pd.concat([ selected_year_data['city'], 
                       selected_year_data['code'], 
                       selected_year_data['population'], 
-                      selected_year_data['population_difference']
+                      selected_year_data['population_difference'],
+                      selected_year_data['population_difference_abs']
                      ], axis=1).sort_values(by='population_difference', ascending=False)
 
 
@@ -216,7 +218,7 @@ with col[0]: # 왼쪽
 
     df_population_difference_sorted = calculate_population_difference(df_korea_economics,selected_year, selected_category)
 
-    if selected_year > 2014:
+    if selected_year > 2014 and not df_population_difference_sorted.empty:
         first_state_name = df_population_difference_sorted.city.iloc[0]
         first_state_population = format_number(df_population_difference_sorted.population.iloc[0])
         first_state_delta = format_number(df_population_difference_sorted.population_difference.iloc[0])
@@ -239,13 +241,13 @@ with col[0]: # 왼쪽
     
     st.markdown('#### 변동 시도 비율')
 
-    if selected_year > 2014:
-        # Filter states with population difference > 5000
-        # df_greater_50000 = df_population_difference_sorted[df_population_difference_sorted.population_difference_absolute > 50000]
+    if selected_year > 2014 and not df_population_difference_sorted.empty:
+        # Filter states with population difference > 20
+        # df_greater_200 = df_population_difference_sorted[df_population_difference_sorted.population_difference_absolute > 200]
         df_greater_20 = df_population_difference_sorted[df_population_difference_sorted.population_difference > 20]
         df_less_20 = df_population_difference_sorted[df_population_difference_sorted.population_difference < -20]
         
-        # % of States with population difference > 5000
+        # % of States with population difference > 20
         states_migration_greater = round((len(df_greater_20)/df_population_difference_sorted.city.nunique())*100)
         states_migration_less = round((len(df_less_20)/df_population_difference_sorted.city.nunique())*100)
         donut_chart_greater = make_donut(states_migration_greater, '전입', 'green')
