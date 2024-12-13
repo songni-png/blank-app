@@ -24,7 +24,14 @@ df_korea_economics = pd.read_csv(data_path, header=1, encoding='utf-8')
 
 # GeoJSON 파일 경로 설정
 korea_geojson = gpd.read_file('korea_시도.geojson', encoding="UTF-8")
-
+for feature in geojson_data['geometries']: 
+    # CSV 파일에서 해당 code 값을 찾기 
+    matching_row = df_korea_economics[df_korea_economics['code'] == feature.get('code', 'default_code')] 
+    if not matching_row.empty: 
+        # 필요한 속성 값을 추가 
+        feature['properties'] = { 
+            '': matching_row['code'].values[0] # 예시로 'code' 키 사용 
+        } 
 # 숫자와 문자를 분리하는 코드 
 df_korea_economics[['code', 'city']] = df_korea_economics['A 시도별(1)'].str.extract(r'(\d+)\s*(.*)')
 
@@ -100,19 +107,23 @@ def make_heatmap(input_df_korea_economics, input_y, input_x, input_color, input_
     return heatmap
 
 # Choropleth map
-def make_choropleth(input_df_korea_economics, input_column, input_color_theme):
+def make_choropleth(input_df_korea_economics,input_korea_geojson,input_column, input_color_theme):
     # 'code' 열을 문자열로 변환 
-    input_df_korea_economics['code'] = input_df_korea_economics['code'].astype(str)
+    input_df['code'] = input_df['code'].astype(str)
     
     choropleth = px.choropleth_mapbox(input_df_korea_economics,
-                               locations='code', 
-                               locationmode='ISO-3',
-                               color=input_column, 
-                               color_continuous_scale=input_color_theme,
-                               range_color=(0, max(input_df_korea_economics.population)),
-                               labels={'population':'인구수', 'code':'시도코드', 'city':'시도명'},
-                               hover_data=['city', 'population']
-                              )
+                                      geojson=input_korea_geojson,
+                                      locations='code', 
+                                      featureidkey='properties.code', 
+                                      mapbox_style='carto-darkmatter', 
+                                      zoom=5, 
+                                      center = {"lat": 35.9, "lon": 126.98},
+                                      color=input_column, 
+                                      color_continuous_scale=input_color_theme,
+                                      range_color=(0, max(input_df_korea_economics.population)),
+                                      labels={'population':'인구수', 'code':'시도코드', 'city':'시도명'},
+                                      hover_data=['city', 'population']
+                                     )
     choropleth.update_geos(fitbounds="locations", visible=False)
     choropleth.update_layout(
         template='plotly_dark',
