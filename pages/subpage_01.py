@@ -24,8 +24,6 @@ df_korea_economics = pd.read_csv(data_path, header=1, encoding='utf-8')
 
 # GeoJSON 파일 경로 설정
 korea_geojson = gpd.read_file('korea_시도.geojson', encoding="UTF-8")
-# 좌표계변경하기
-korea_geojson = gdf_korea_sido.to_crs(epsg=4326, inplace=False)
 
 # 'code' 열이 존재하는지 확인하고, 존재하지 않는 경우 추가 
 if 'code' not in df_korea_economics.columns: 
