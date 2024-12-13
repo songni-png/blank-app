@@ -23,7 +23,9 @@ data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126
 df_korea_economics = pd.read_csv(data_path, header=1, encoding='utf-8')
 
 # GeoJSON 파일 경로 설정
-korea_geojson = gpd.read_file('korea_시도.geojson', encoding="UTF-8")
+geojson_path ='korea_시도.geojson' 
+with open(geojson_path, encoding='utf-8') as f: 
+    geojson_data = json.load(f) 
 for feature in geojson_data['geometries']: 
     # CSV 파일에서 해당 code 값을 찾기 
     matching_row = df_korea_economics[df_korea_economics['code'] == feature.get('code', 'default_code')] 
