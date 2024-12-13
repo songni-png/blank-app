@@ -105,7 +105,7 @@ def make_heatmap(input_df_korea_economics, input_y, input_x, input_color, input_
 
 # Choropleth map
 def make_choropleth(input_df_korea_economics, input_gj, input_column, input_color_theme):
-    choropleth = px.choropleth_mapbox(input_df,
+    choropleth = px.choropleth_mapbox(input_df_korea_economics,
                                geojson=input_gj,
                                locations='code', 
                                featureidkey='properties.CTPRVN_CD',
