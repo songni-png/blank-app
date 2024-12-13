@@ -202,12 +202,14 @@ def calculate_population_difference(input_df_korea_economics, input_year, input_
     
     else: selected_year_data['population_difference'] = 0 
           selected_year_data['population_difference_abs'] = 0
-    return pd.concat([ selected_year_data['city'], 
-                      selected_year_data['code'], 
-                      selected_year_data['population'], 
-                      selected_year_data['population_difference'],
-                      selected_year_data['population_difference_abs']
-                     ], axis=1).sort_values(by='population_difference', ascending=False)
+   
+    return pd.concat([ 
+        selected_year_data['city'], 
+        selected_year_data['code'], 
+        selected_year_data['population'], 
+        selected_year_data['population_difference'],
+        selected_year_data['population_difference_abs']
+    ], axis=1).sort_values(by='population_difference', ascending=False)
 
 
 # 대시보드 레이아웃
