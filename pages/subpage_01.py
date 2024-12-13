@@ -210,7 +210,7 @@ col = st.columns((3, 6.5, 4.5), gap='large')
 with col[0]: # 왼쪽
     st.markdown('#### 증가/감소')
 
-    df_population_difference_sorted = calculate_population_difference(df_korea_economics,korea_geojson,selected_year, selected_category)
+    df_population_difference_sorted = calculate_population_difference(df_korea_economics,selected_year, selected_category)
 
     if selected_year > 2014:
         first_state_name = df_population_difference_sorted.city.iloc[0]
@@ -262,7 +262,7 @@ with col[0]: # 왼쪽
 with col[1]:
     st.markdown('#### ' + str(selected_year) + '년 ' + str(selected_category))
     
-    choropleth = make_choropleth(df_selected_year, 'population', selected_color_theme)
+    choropleth = make_choropleth(df_selected_year,,korea_geojson, 'population', selected_color_theme)
     st.plotly_chart(choropleth, use_container_width=True)
     
     heatmap = make_heatmap(df_korea_economics, 'year', 'city', 'population', selected_color_theme)
