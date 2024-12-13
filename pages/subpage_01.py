@@ -28,6 +28,9 @@ file_list = glob.glob(file_pattern)
 # GeoDataFrame 생성
 gdfs = [gpd.read_file(file) for file in file_list]
 korea_geojson = gpd.GeoDataFrame(pd.concat(gdfs, ignore_index=True))
+# 'SGG_NM' 열의 앞부분 단어 제거
+gdf_korea_sido['행정구'] = gdf_korea_sido['SGG_NM'].str.split().str[1:].str.join(' ')
+
 
 # 숫자와 문자를 분리하는 코드 
 df_korea_economics[['code', 'city']] = df_korea_economics['A 시도별(1)'].str.extract(r'(\d+)\s*(.*)')
@@ -108,7 +111,7 @@ def make_choropleth(input_df_korea_economics, input_gj, input_column, input_colo
     choropleth = px.choropleth_mapbox(input_df_korea_economics,
                                geojson=input_gj,
                                locations='code', 
-                               featureidkey='properties.CTPRVN_CD',
+                               featureidkey='properties.행정구',
                                mapbox_style='carto-darkmatter',
                                zoom=5, 
                                center = {"lat": 35.9, "lon": 126.98},
