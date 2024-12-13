@@ -41,7 +41,7 @@ for feature in geojson_data['geometries']:
             '': matching_row['code'].values[0] # 예시로 'code' 키 사용 
         } 
 # 수정된 GeoJSON 파일 저장 
-with open('data/korea_시도_modified.geojson', 'w', encoding='utf-8') as f: 
+with open('korea_시도_modified.geojson', 'w', encoding='utf-8') as f: 
     json.dump(geojson_data, f, ensure_ascii=False, indent=4) 
 # 수정된 GeoJSON 파일 확인 
 print(json.dumps(geojson_data['geometries'][0], indent=4, ensure_ascii=False))
