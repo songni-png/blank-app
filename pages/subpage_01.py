@@ -29,7 +29,7 @@ file_list = glob.glob(file_pattern)
 gdfs = [gpd.read_file(file) for file in file_list]
 korea_geojson = gpd.GeoDataFrame(pd.concat(gdfs, ignore_index=True))
 # 'SGG_NM' 열의 앞부분 단어 제거
-gdf_korea_sido['행정구'] = gdf_korea_sido['SGG_NM'].str.split().str[1:].str.join(' ')
+korea_geojson['행정구'] = korea_geojson['SGG_NM'].str.split().str[1:].str.join(' ')
 
 
 # 숫자와 문자를 분리하는 코드 
