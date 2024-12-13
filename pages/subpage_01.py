@@ -100,7 +100,7 @@ def make_heatmap(input_df_korea_economics, input_y, input_x, input_color, input_
     return heatmap
 
 # Choropleth map
-def make_choropleth(input_df_korea_economics,], input_column, input_color_theme):
+def make_choropleth(input_df_korea_economics, input_column, input_color_theme):
     # 'code' 열을 문자열로 변환 
     input_df_korea_economics['code'] = input_df_korea_economics['code'].astype(str)
     
