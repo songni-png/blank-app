@@ -29,8 +29,8 @@ if 'code' not in df_korea_economics.columns:
 # GeoJSON 파일 경로 설정
 geojson_path ='korea_시도.geojson' 
 with open(geojson_path, encoding='utf-8') as f: 
-    geojson_data = json.load(f) 
-for feature in geojson_data['geometries']: 
+    korea_geojson = json.load(f) 
+for feature in korea_geojson['geometries']: 
     # CSV 파일에서 해당 code 값을 찾기 
     matching_row = df_korea_economics[df_korea_economics['code'] == feature.get('code', 'default_code')] 
     if not matching_row.empty: 
