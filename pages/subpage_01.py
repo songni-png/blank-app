@@ -22,6 +22,10 @@ data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126
 # CSV 데이터 불러오기
 df_korea_economics = pd.read_csv(data_path, header=1, encoding='utf-8')
 
+# 'code' 열이 존재하는지 확인하고, 존재하지 않는 경우 추가 
+if 'code' not in df_korea_economics.columns: 
+    df_korea_economics['code'] = 'default_code' # 기본값으로 'default_code' 추가 
+
 # GeoJSON 파일 경로 설정
 geojson_path ='korea_시도.geojson' 
 with open(geojson_path, encoding='utf-8') as f: 
