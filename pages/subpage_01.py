@@ -30,7 +30,6 @@ korea_geojson = gdf_korea_sido.to_crs(epsg=4326, inplace=False)
 # 'code' 열이 존재하는지 확인하고, 존재하지 않는 경우 추가 
 if 'code' not in df_korea_economics.columns: 
     df_korea_economics['code'] = 'default_code' # 기본값으로 'default_code' 추가 
-  json.load(f) )
 # 각 geometry 객체에 properties 키 추가 
 for feature in geojson_data['geometries']: 
     # CSV 파일에서 해당 code 값을 찾기 
