@@ -201,7 +201,6 @@ def calculate_population_difference(input_df_korea_economics, input_year, input_
         selected_year_data['population_difference_abs'] = abs(selected_year_data['population_difference']) 
     
     else: selected_year_data['population_difference'] = 0 
-          selected_year_data['population_difference_abs'] = 0 
     return pd.concat([ selected_year_data['city'], 
                       selected_year_data['code'], 
                       selected_year_data['population'], 
