@@ -226,7 +226,7 @@ with col[0]: # 왼쪽
         first_state_delta = ''
     st.metric(label=first_state_name, value=first_state_population, delta=first_state_delta)
 
-    if selected_year > 2014:
+    if selected_year > 2014 and not df_population_difference_sorted.empty:
         last_state_name = df_population_difference_sorted.city.iloc[-1]
         last_state_population = format_number(df_population_difference_sorted.population.iloc[-1])   
         last_state_delta = format_number(df_population_difference_sorted.population_difference.iloc[-1])   
