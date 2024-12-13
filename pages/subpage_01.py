@@ -23,14 +23,9 @@ data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126
 df_korea_economics = pd.read_csv(data_path, header=1, encoding='utf-8')
 
 # GeoJSON 파일 경로 설정
-file_pattern = os.path.join('LARD_ADM_SECT_SGG_*.json')
-file_list = glob.glob(file_pattern)
-# GeoDataFrame 생성
-gdfs = [gpd.read_file(file) for file in file_list]
-korea_geojson = gpd.GeoDataFrame(pd.concat(gdfs, ignore_index=True))
-# 'SGG_NM' 열의 앞부분 단어 제거
-korea_geojson['행정구'] = korea_geojson['SGG_NM'].str.split().str[1:].str.join(' ')
-
+korea_geojson = json.load(open('korea_시도.geojson', encoding="UTF-8")) 
+# 좌표계변경하기
+korea_geojson = gdf_korea_sido.to_crs(epsg=5179, inplace=False)
 
 # 숫자와 문자를 분리하는 코드 
 df_korea_economics[['code', 'city']] = df_korea_economics['A 시도별(1)'].str.extract(r'(\d+)\s*(.*)')
