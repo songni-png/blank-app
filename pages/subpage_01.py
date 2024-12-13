@@ -185,11 +185,11 @@ def make_donut(input_response, input_text, input_color):
 
 # Convert population to text 
 def format_number(num):
-    if num > 1000000:
-        if not num % 1000000:
-            return f'{num // 1000000} M'
-        return f'{round(num / 1000000, 1)} M'
-    return f'{num // 1000} K'
+    if num > 10000:
+        if not num % 10000:
+            return f'{num // 10000} M'
+        return f'{round(num / 10000, 1)} M'
+    return f'{num // 10} K'
 
 # Calculate population difference 
 def calculate_population_difference(input_df_korea_economics, input_year, input_category): 
