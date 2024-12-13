@@ -182,7 +182,7 @@ def make_donut(input_response, input_text, input_color):
                       legend=None),
   ).properties(width=130, height=130)
   return plot_bg + plot + text # 백그라운드, 차트, 텍스트를 합쳐서 그래프 생성
-
+df_korea_economics['population'] = df_korea_economics['population'].replace('-','0').fillna('0').astype(float)
 # Convert population to text 
 def format_number(num):
     if num > 1000000:
