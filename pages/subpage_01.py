@@ -66,8 +66,6 @@ df_korea_economics['population'] = df_korea_economics['population'].replace('-',
 # 열 순서 변경
 df_korea_economics = df_korea_economics[['city','code','year','category','population']]
 
-df_korea_economics
-
 # 연도 리스트를 내림차순으로 정렬
 year_list = list(df_korea_economics.year.unique())[::-1]
 # NumPy 배열로 변환 
@@ -296,3 +294,5 @@ with col[2]:
                         max_value=max(df_selected_year_sorted.population),
                      )}
                  )
+
+df_korea_economics
