@@ -203,11 +203,11 @@ with col[1]:
               )
   # 시계열 그래프 생성 
   # '계'를 제외한 데이터프레임 생성 
-  df_korea_growth_filtered = df_korea_growth[df_korea_growth['city'] == '전국']
-  line_chart = alt.Chart(df_korea_growth_filtered).mark_line(point=True).encode( 
+  
+  line_chart = alt.Chart(df_korea_growth).mark_line(point=True).encode( 
     x=alt.X('year:O', title='연도'), 
     y=alt.Y('growth_rate:Q', title='전국 경제성장률(%)'), 
-    tooltip=['year', 'growth_rate'] 
+    tooltip=['year','city','growth_rate'] 
   ).properties(
     width=700, 
     height=400 
