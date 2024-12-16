@@ -163,7 +163,7 @@ col = st.columns((5,5), gap='large')
 with col[0]: # 왼쪽
   st.markdown('#### ' + str(selected_year) + '년 경제성장률')
     
-  choropleth = make_choropleth(df_selected_year_sorted, korea_geojson, 'growth_rate', selected_color_theme)
+  choropleth = make_choropleth(df_selected_year, korea_geojson, 'growth_rate', selected_color_theme)
   st.plotly_chart(choropleth, use_container_width=True)
     
   heatmap = make_heatmap(df_korea_growth, 'year', 'city', 'growth_rate', selected_color_theme)
