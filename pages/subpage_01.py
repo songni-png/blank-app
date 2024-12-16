@@ -26,6 +26,27 @@ korea_geojson = json.load(open('KOREA_시도_geoJSON.json', encoding="UTF-8")) #
 #######################
 # 데이터 전처리
 
+# 숫자와 문자를 분리하는 코드 
+df_korea_economics[['code', 'city']] = df_korea_economics['A 시도별(1)'].str.extract(r'(\d+)\s*(.*)')
+
+df_korea_economics.drop('A 시도별(1)',axis=1,inplace=True)
+
+# 데이터를 멜팅하여 데이터프레임으로 변환
+df_korea_economics = df_korea_economics.melt(
+                     id_vars = ['city','code'],
+                     var_name = 'property',
+                     value_name = 'population',
+)
+# 'property' 열을 'year'와 'category' 열로 분리 
+df_korea_economics['year'] = years 
+df_korea_economics['category'] = df_korea_economics['property'].str.extract(r'^\D*\d+\s*(.*)')[0] 
+# 'category' 열에서 '(' 이후 부분 제거 
+df_korea_economics['category'] = df_korea_economics['category'].str.split('(').str[0].str.strip() 
+# 'property' 열 삭제 
+df_korea_economics.drop('property', axis=1, inplace=True) 
+# 열 순서 변경
+df_korea_economics = df_korea_economics[['city','code','year','category','population']]
+
 # '계'를 '전국'으로 변경
 df_korea_economics['city'] = df_korea_economics['city'].replace('계', '전국')
 
