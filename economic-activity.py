@@ -117,7 +117,7 @@ with cl2:
             by = "city",              # 지역별 그룹화
             as_index = False            # 인덱스 사용 안함
             )                           # 판매액 합계
-        st.dataframe(category.style.background_gradient(cmap="Oranges"))  # 데이터프레임 출력
+        st.dataframe(Category.style.background_gradient(cmap="Oranges"))  # 데이터프레임 출력
         csv = Category.to_csv(index = False).encode('utf-8')   # 데이터프레임을 csv로 변환
         st.download_button(
             "데이터 다운로드", 
