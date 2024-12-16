@@ -117,7 +117,7 @@ def make_heatmap(input_df_korea_economics, input_y, input_x, input_color, input_
             y=alt.Y(f'{input_y}:O', axis=alt.Axis(title="연도", titleFontSize=18, titlePadding=15, titleFontWeight=900, labelAngle=0)),
             x=alt.X(f'{input_x}:O', axis=alt.Axis(title="", titleFontSize=18, titlePadding=15, titleFontWeight=900)),
             color=alt.Color(f'max({input_color}):Q',
-                            legend={'population':selected_category, 'code':'시도코드', 'city':'시도명'},   
+                            legend=None,
                             scale=alt.Scale(scheme=input_color_theme)),
             stroke=alt.value('black'),
             strokeWidth=alt.value(0.25),
