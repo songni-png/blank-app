@@ -110,7 +110,7 @@ def make_heatmap(input_df_korea_economics, input_y, input_x, input_color, input_
     # height=300
     return heatmap
 # Ensure 'code' in GeoJSON matches 'code' in CSV
-for feature in korea_geojson['feature']:
+for feature in korea_geojson['features']:
     if 'properties' in feature and 'code' in feature['properties']:
         geo_code = str(feature['properties']['code'])
         csv_code = df_korea_economics['code'].astype(str)
