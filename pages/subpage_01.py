@@ -109,6 +109,14 @@ def make_heatmap(input_df_korea_economics, input_y, input_x, input_color, input_
         ) 
     # height=300
     return heatmap
+# Ensure 'code' in GeoJSON matches 'code' in CSV
+for feature in korea_geojson['features']:
+    if 'properties' in feature and 'code' in feature['properties']:
+        geo_code = str(feature['properties']['code'])
+        csv_code = df_korea_economics['code'].astype(str)
+        if geo_code not in csv_code.values:
+            print(f"GeoJSON code {geo_code} not found in CSV")
+
 
 # Choropleth map
 def make_choropleth(input_df_korea_economics,input_korea_geojson,input_column, input_color_theme):
@@ -181,6 +189,19 @@ def make_donut(input_response, input_text, input_color):
   ).properties(width=130, height=130)
   return plot_bg + plot + text # 백그라운드, 차트, 텍스트를 합쳐서 그래프 생성
 df_korea_economics['population'] = df_korea_economics['population'].replace('-','0').fillna('0').astype(float)
+
+# Adjust population based on category
+def adjust_population(row):
+    if row['category'] in ['15세이상인구', '경제활동인구', '비경제활동인구']:
+        # Convert from thousands to actual numbers
+        return row['population'] * 1000
+    elif row['category'] in ['경제활동참가율', '실업률', '고용률', '15-64세 고용률']:
+        # Keep percentage as is
+        return row['population']
+    return row['population']
+
+df_korea_economics['population'] = df_korea_economics.apply(adjust_population, axis=1)
+
 # Convert population to text 
 def format_number(num):
     if num > 1000000:
@@ -189,26 +210,17 @@ def format_number(num):
         return f'{round(num / 1000000, 1)} M'
     return f'{num // 1000} K'
 
-# Calculate population difference 
 def calculate_population_difference(input_df_korea_economics, input_year, input_category): 
-    selected_year_data = input_df_korea_economics.query('year == @input_year & category == @input_category').reset_index() 
-    previous_year_data = input_df_korea_economics.query('year == @input_year - 1 & category == @input_category').reset_index() 
+    selected_year_data = input_df_korea_economics.query('year == @input_year & category == @input_category')
+    previous_year_data = input_df_korea_economics.query('year == @input_year - 1 & category == @input_category')
     
-    if not selected_year_data.empty and not previous_year_data.empty: 
-        selected_year_data['population_difference'] = selected_year_data['population'].sub(previous_year_data['population'], fill_value=0) 
-        selected_year_data['population_difference_abs'] = abs(selected_year_data['population_difference']) 
-    
-    else: 
-        selected_year_data['population_difference'] = 0 
-        selected_year_data['population_difference_abs'] = 0
-   
-    return pd.concat([ 
-        selected_year_data['city'], 
-        selected_year_data['code'], 
-        selected_year_data['population'], 
-        selected_year_data['population_difference'],
-        selected_year_data['population_difference_abs']
-    ], axis=1).sort_values(by='population_difference', ascending=False)
+    if not selected_year_data.empty and not previous_year_data.empty:
+        merged_data = pd.merge(selected_year_data, previous_year_data, on='code', suffixes=('', '_prev'))
+        merged_data['population_difference'] = merged_data['population'] - merged_data['population_prev']
+        merged_data['population_difference_abs'] = merged_data['population_difference'].abs()
+        return merged_data[['city', 'code', 'population', 'population_difference', 'population_difference_abs']]
+    else:
+        return pd.DataFrame(columns=['city', 'code', 'population', 'population_difference', 'population_difference_abs'])
 
 
 # 대시보드 레이아웃
