@@ -259,12 +259,12 @@ with col[0]: # 왼쪽
     if selected_year > 2014 and not df_population_difference_sorted.empty:
         # Filter states with population difference > 20
         # df_greater_200 = df_population_difference_sorted[df_population_difference_sorted.population_difference_absolute > 200]
-        df_greater_20 = df_population_difference_sorted[df_population_difference_sorted.population_difference > 20]
-        df_less_20 = df_population_difference_sorted[df_population_difference_sorted.population_difference < -20]
+        df_greater_5000 = df_population_difference_sorted[df_population_difference_sorted.population_difference > 5000]
+        df_less_5000 = df_population_difference_sorted[df_population_difference_sorted.population_difference < -5000]
         
-        # % of States with population difference > 20
-        states_migration_greater = round((len(df_greater_20)/df_population_difference_sorted.city.nunique())*100)
-        states_migration_less = round((len(df_less_20)/df_population_difference_sorted.city.nunique())*100)
+        # % of States with population difference > 5000
+        states_migration_greater = round((len(df_greater_5000)/df_population_difference_sorted.city.nunique())*100)
+        states_migration_less = round((len(df_less_5000)/df_population_difference_sorted.city.nunique())*100)
         donut_chart_greater = make_donut(states_migration_greater, '전입', 'green')
         donut_chart_less = make_donut(states_migration_less, '전출', 'red')
     else:
@@ -272,6 +272,7 @@ with col[0]: # 왼쪽
         states_migration_less = 0
         donut_chart_greater = make_donut(states_migration_greater, '전입', 'green')
         donut_chart_less = make_donut(states_migration_less, '전출', 'red')
+
 
     migrations_col = st.columns((0.5, 2, 0.5))
     with migrations_col[1]:
