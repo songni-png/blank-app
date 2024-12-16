@@ -148,8 +148,6 @@ df_korea_economics['population'] = (
     .fillna('0')        # NaN을 0으로 대체
     .astype(float)      # 숫자로 변환
 )
-df_korea_economics['population_adjusted'] = df_korea_economics.apply(adjust_population, axis=1)
-
 print(f"States Migration Greater: {states_migration_greater}")
 print(f"States Migration Less: {states_migration_less}")
 print(f"Unique Cities: {df_population_difference_sorted.city.nunique()}")
