@@ -184,7 +184,7 @@ with col[1]:
              )
   # 데이터 보기
   with st.expander("데이터 보기"):
-       st.dataframe(df_korea_economics.iloc[:500,1:20:2].style.background_gradient(cmap="Oranges"))
+       st.dataframe(df_korea_economics.style.background_gradient(cmap="Oranges"))
 
 
 
