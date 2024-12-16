@@ -201,13 +201,13 @@ with col[1]:
   # '계'를 제외한 데이터프레임 생성 
   df_selected_year_sorted_filtered = df_selected_year_sorted[df_selected_year_sorted['city'] != '계']
   
-  # 
-  st.subheader("도시별 ",selected_category)
+  # bar 그래프 시각화
+  st.subheader("도시별 ",'selected_category')
   fig = px.bar(
-    df_selected_year_sorted, 
+    df_selected_year_sorted_filtered, 
     x = "city",
     y = "population", 
-    text = ['${:,.2f}'.format(x) for x in df_selected_year_sorted["population"]],      
+    text = ['${:,.2f}'.format(x) for x in df_selected_year_sorted_filtered["population"]],      
     template = "seaborn"    # 그래프 테마 설정
   )
   
