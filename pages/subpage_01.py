@@ -236,7 +236,7 @@ def calculate_population_difference(input_df_korea_economics, input_year, input_
     merged_data['population_difference'] = 0 
     merged_data['population_difference_abs'] = 0 
    
-  return merged_data[['city', 'code', 'population', 'population_difference', 'population_difference_abs']].sort_values(by='population_difference', ascending=
+  return merged_data[['city', 'code', 'population', 'population_difference', 'population_difference_abs']].sort_values(by='population_difference', ascending=False)
 
 # 대시보드 레이아웃
 col = st.columns((3, 6.5, 4.5), gap='large')
