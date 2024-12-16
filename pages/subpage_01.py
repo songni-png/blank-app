@@ -153,7 +153,7 @@ df_korea_economics['population'] = (
 
 
 # 대시보드 레이아웃
-col = st.columns((6.5, 4.5), gap='large')
+col = st.columns((7, 7), gap='large')
 
 with col[0]: # 왼쪽
   st.markdown('#### ' + str(selected_year) + '년 ' + str(selected_category))
