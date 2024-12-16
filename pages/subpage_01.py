@@ -292,9 +292,14 @@ with col[0]: # 왼쪽
         st.altair_chart(donut_chart_greater)
         st.write('감소')
         st.altair_chart(donut_chart_less)
+      
 print(f"States Migration Greater: {states_migration_greater}")
 print(f"States Migration Less: {states_migration_less}")
 print(f"Unique Cities: {df_population_difference_sorted.city.nunique()}")
+if df_population_difference_sorted.empty:
+    print("Population difference data is empty.")
+    states_migration_greater = 0
+    states_migration_less = 0
 
 
 with col[1]:
