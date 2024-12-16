@@ -115,10 +115,11 @@ with st.expander("선택한 데이터 보기"):    # 확장창
 def make_heatmap(input_df_korea_economics, input_y, input_x, input_color, input_color_theme):
     heatmap = alt.Chart(input_df_korea_economics).mark_rect().encode(
             y=alt.Y(f'{input_y}:O', axis=alt.Axis(title="연도", titleFontSize=18, titlePadding=15, titleFontWeight=900, labelAngle=0)),
-            x=alt.X(f'{input_x}:O', axis=alt.Axis(title=selected_category, titleFontSize=18, titlePadding=15, titleFontWeight=900)),
+            x=alt.X(f'{input_x}:O', axis=alt.Axis(title="", titleFontSize=18, titlePadding=15, titleFontWeight=900)),
             color=alt.Color(f'max({input_color}):Q',
-                             legend=None,
-                             scale=alt.Scale(scheme=input_color_theme)),
+                            legend=None,
+                            scale=alt.Scale(scheme=input_color_theme)),
+            labels={'population':selected_category, 'code':'시도코드', 'city':'시도명'},
             stroke=alt.value('black'),
             strokeWidth=alt.value(0.25),
         ).properties(width=900
@@ -176,7 +177,7 @@ with col[0]: # 왼쪽
   choropleth = make_choropleth(df_selected_year, korea_geojson, 'population', selected_color_theme)
   st.plotly_chart(choropleth, use_container_width=True)
     
-  heatmap = make_heatmap(df_korea_economics, 'year', 'city', selected_category, selected_color_theme)
+  heatmap = make_heatmap(df_korea_economics, 'year', 'city', 'population', selected_color_theme)
   st.altair_chart(heatmap, use_container_width=True)
 
 with col[1]:
