@@ -49,7 +49,6 @@ df_korea_economics = df_korea_economics.melt(
                      var_name = 'property',
                      value_name = 'population',
 )
-df_korea_economics['code'] = df_korea_economics['code'].astype(str)
 
 # 연도 리스트 생성 
 years = [] 
@@ -131,8 +130,8 @@ def make_choropleth(input_df_korea_economics,input_korea_geojson,input_column, i
                                       color=input_column, 
                                       color_continuous_scale=input_color_theme,
                                       range_color=(0, max(input_df_korea_economics.population)),
-                                      labels={'population':'인구수', 'code':'시도코드', 'city':'시도명'},
-                                      hover_data=['city', 'population']
+                                      labels={'population':'category_list', 'code':'시도코드', 'city':'시도명'},
+                                      hover_data=['city', 'category_list']
                                       )
     choropleth.update_geos(fitbounds="locations", visible=False)
     choropleth.update_layout(
