@@ -203,9 +203,12 @@ with col[1]:
     df_selected_year_sorted, 
     x = "city",
     y = "population", 
-    text = ['${:,.2f}'.format(x) for x in df_selected_year_sorted["city"]],      
+    text = ['${:,.2f}'.format(x) for x in df_selected_year_sorted["population"]],      
     template = "seaborn"    # 그래프 테마 설정
   )
+  
+  fig.update_traces(textposition='outside')
+  
   st.plotly_chart(fig, use_container_width=True, height = 200)  # 그래프 출력
 
 
