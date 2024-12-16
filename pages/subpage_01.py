@@ -37,6 +37,11 @@ df_korea_economics = df_korea_economics.melt(
                      var_name = 'property',
                      value_name = 'population',
 )
+# 연도 리스트 생성 
+years = [] 
+for i in range(2023, 1999, -1): 
+    years.extend([i] * 126) 
+years = years[:len(df_korea_economics)] 
 # 'property' 열을 'year'와 'category' 열로 분리 
 df_korea_economics['year'] = years 
 df_korea_economics['category'] = df_korea_economics['property'].str.extract(r'^\D*\d+\s*(.*)')[0] 
