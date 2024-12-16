@@ -72,13 +72,10 @@ df_korea_growth.drop('행정구역별(1)', axis=1, inplace=True)
 
 # 데이터를 멜팅하여 데이터프레임으로 변환
 df_korea_growth = df_korea_growth.melt(
-    id_vars=['city'],
+    id_vars='city',
     var_name='year',
     value_name='growth_rate',
 )
-
-# city가 같은 열을 바탕으로 code 데이터를 추가
-df_korea_growth['code'] = df_korea_growth['city'].map(csv_mapping)
 
 # city가 같은 열을 바탕으로 code 데이터를 추가
 df_korea_growth['code'] = df_korea_growth['city'].map(csv_mapping)
@@ -94,13 +91,13 @@ year_list = list(df_korea_growth.year.unique())[-1]
 #######################
 # 사이드바 설정
 with st.sidebar:
-    st.title('대한민국 경제활동인구 대시보드')
+    st.title('대한민국 경제성장률 대시보드')
     
-    year_list = list(df_korea_economics.year.unique())[::-1]  # 연도 리스트를 내림차순으로 정렬
+    year_list = list(df_korea_growth.year.unique())[::-1]  # 연도 리스트를 내림차순으로 정렬
    
     selected_year = st.selectbox('연도 선택', year_list) # selectbox에서 연도 선택
     
-    df_selected_year = df_korea_economics.query('year == @selected_year') # 선택한 연도에 해당하는 데이터만 가져오기
+    df_selected_year = df_korea_growth.query('year == @selected_year') # 선택한 연도에 해당하는 데이터만 가져오기
     df_selected_year_sorted = df_selected_year.sort_values(by="year", ascending=False) # 선택한 연도에 해당하는 데이터를 인구수를 기준으로 내림차순 정렬
 
     color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
