@@ -301,11 +301,6 @@ print(f"States Migration Greater: {states_migration_greater}")
 print(f"States Migration Less: {states_migration_less}")
 print(f"Unique Cities: {df_population_difference_sorted.city.nunique()}")
 
-if df_population_difference_sorted.empty:
-    print("Population difference data is empty.")
-    states_migration_greater = 0
-    states_migration_less = 0
-print(f"Input Response: {input_response}")
 
 with col[1]:
     st.markdown('#### ' + str(selected_year) + '년 ' + str(selected_category))
