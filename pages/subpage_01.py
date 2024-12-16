@@ -113,7 +113,7 @@ with st.sidebar:
 
 with st.expander("연도별 데이터 보기"):    # 확장창
   st.dataframe(df_selected_year_sorted.style.background_gradient(cmap="Blues"))  # 데이터프레임 출력
-  csv = df_selected_year_sorted.to_csv(index = False,encoding='utf-8-sig').encode('utf-8-sig')  # 데이터프레임을 csv로 변환
+  csv = df_selected_year_sorted.to_csv(index = False,encoding='utf-8').encode('utf-8')  # 데이터프레임을 csv로 변환
   st.download_button(
     "데이터 다운로드",    # 다운로드 버튼 명칭
     data = csv,          # 데이터 유형
