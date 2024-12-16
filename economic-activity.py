@@ -73,6 +73,25 @@ if isinstance(korea_geojson, dict):  # GeoJSON이 딕셔너리 형식이라면
 # GeoJSON의 CTPRVN_CD 값을 CSV 매핑을 기반으로 업데이트
 korea_geojson['CTPRVN_CD'] = korea_geojson['CTP_KOR_NM'].map(csv_mapping).fillna(korea_geojson['CTPRVN_CD'])
 
+
+
+#######################
+# 사이드바 설정
+with st.sidebar:
+    st.title('대한민국 경제활동인구 대시보드')
+    
+    year_list = list(df_korea_economics.year.unique())[::-1]  # 연도 리스트를 내림차순으로 정렬
+    category_list = list(df_korea_economics.category.unique())  # 카테고리 리스트
+    
+    selected_year = st.selectbox('연도 선택', year_list) # selectbox에서 연도 선택
+    selected_category = st.selectbox('카테고리 선택', category_list) # selectbox에서 카테고리 선택
+
+    df_selected_year = df_korea_economics.query('year == @selected_year & category == @selected_category') # 선택한 연도와 카테고리에 해당하는 데이터만 가져오기
+    df_selected_year_sorted = df_selected_year.sort_values(by="population", ascending=False) # 선택한 연도와 카테고리에 해당하는 데이터를 인구수를 기준으로 내림차순 정렬
+
+    color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
+    selected_color_theme = st.selectbox('컬러 테마 선택', color_theme_list)
+
 #######################
  # 화면을 2개의 컬럼으로 나누기
 cl1, cl2 = st.columns(2)
@@ -106,25 +125,6 @@ with cl2:
             mime = "text/csv",
             help = 'CSV 파일로 데이터를 다운로드하기 위해 클릭하세요.'
         )
-
-#######################
-# 사이드바 설정
-with st.sidebar:
-    st.title('대한민국 경제활동인구 대시보드')
-    
-    year_list = list(df_korea_economics.year.unique())[::-1]  # 연도 리스트를 내림차순으로 정렬
-    category_list = list(df_korea_economics.category.unique())  # 카테고리 리스트
-    
-    selected_year = st.selectbox('연도 선택', year_list) # selectbox에서 연도 선택
-    selected_category = st.selectbox('카테고리 선택', category_list) # selectbox에서 카테고리 선택
-
-    df_selected_year = df_korea_economics.query('year == @selected_year & category == @selected_category') # 선택한 연도와 카테고리에 해당하는 데이터만 가져오기
-    df_selected_year_sorted = df_selected_year.sort_values(by="population", ascending=False) # 선택한 연도와 카테고리에 해당하는 데이터를 인구수를 기준으로 내림차순 정렬
-
-    color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
-    selected_color_theme = st.selectbox('컬러 테마 선택', color_theme_list)
-
-
 
 #######################
 # 그래프 함수
