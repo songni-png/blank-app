@@ -110,7 +110,7 @@ with st.sidebar:
 
 # Heatmap 그래프
 def make_heatmap(input_df_korea_growth, input_y, input_x, input_color, input_color_theme):
-    heatmap = alt.Chart(input_df_korea_economics).mark_rect().encode(
+    heatmap = alt.Chart(input_df_korea_growth).mark_rect().encode(
             y=alt.Y(f'{input_y}:O', axis=alt.Axis(title="연도", titleFontSize=18, titlePadding=15, titleFontWeight=900, labelAngle=0)),
             x=alt.X(f'{input_x}:O', axis=alt.Axis(title="", titleFontSize=18, titlePadding=15, titleFontWeight=900)),
             color=alt.Color(f'max({input_color}):Q',
