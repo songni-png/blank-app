@@ -148,9 +148,6 @@ df_korea_economics['population'] = (
     .fillna('0')        # NaN을 0으로 대체
     .astype(float)      # 숫자로 변환
 )
-print(f"States Migration Greater: {states_migration_greater}")
-print(f"States Migration Less: {states_migration_less}")
-print(f"Unique Cities: {df_population_difference_sorted.city.nunique()}")
 
 if df_population_difference_sorted.empty:
     print("Population difference data is empty.")
@@ -306,6 +303,9 @@ with col[0]: # 왼쪽
         st.altair_chart(donut_chart_greater)
         st.write('감소')
         st.altair_chart(donut_chart_less)
+print(f"States Migration Greater: {states_migration_greater}")
+print(f"States Migration Less: {states_migration_less}")
+print(f"Unique Cities: {df_population_difference_sorted.city.nunique()}")
 
 with col[1]:
     st.markdown('#### ' + str(selected_year) + '년 ' + str(selected_category))
