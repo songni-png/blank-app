@@ -200,5 +200,4 @@ with col[1]:
                     min_value=0,
                     max_value=max(df_selected_year_sorted.growth_rate),
                  )}
-             )
-  df_korea_growth
+              )
