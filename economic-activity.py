@@ -94,9 +94,9 @@ with st.sidebar:
     selected_color_theme = st.selectbox('컬러 테마 선택', color_theme_list)
 
 #######################
-# 연도별 데이터 보기 
+# 선택한 데이터 보기 
 
-with st.expander("연도별 데이터 보기"):    # 확장창
+with st.expander("선택한 데이터 보기"):    # 확장창
   st.dataframe(df_selected_year_sorted.style.background_gradient(cmap="Blues"))  # 데이터프레임 출력
   csv = df_selected_year_sorted.to_csv(index = False).encode('utf-8')  # 데이터프레임을 csv로 변환
   st.download_button(
