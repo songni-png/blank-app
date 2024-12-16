@@ -73,6 +73,39 @@ if isinstance(korea_geojson, dict):  # GeoJSON이 딕셔너리 형식이라면
 # GeoJSON의 CTPRVN_CD 값을 CSV 매핑을 기반으로 업데이트
 korea_geojson['CTPRVN_CD'] = korea_geojson['CTP_KOR_NM'].map(csv_mapping).fillna(korea_geojson['CTPRVN_CD'])
 
+#######################
+ # 화면을 2개의 컬럼으로 나누기
+cl1, cl2 = st.columns(2)
+
+# 첫번째 컬럼(카테고리별 데이터 보기)
+with cl1:
+    with st.expander("연도별 데이터 보기"):    # 확장창
+        st.dataframe(selected_year.style.background_gradient(cmap="Blues"))  # 데이터프레임 출력
+        csv = selected_year.to_csv(index = False).encode('utf-8')  # 데이터프레임을 csv로 변환
+        st.download_button(
+            "데이터 다운로드",    # 다운로드 버튼 명칭
+            data = csv,          # 데이터 유형
+            file_name = "Year.csv",  # 파일명
+            mime = "text/csv",   # 파일 형식
+            help = 'CSV 파일로 데이터를 다운로드하기 위해 클릭하세요.' # 마우스 버튼 이동시 도움말 표시
+        )
+
+# 두번째 컬럼(지역별 데이터 보기)
+with cl2:
+    with st.expander("항목별 데이터 보기"):
+        region = selected_category.groupby(   # 지역별 판매액 계산
+            by = "category",              # 지역별 그룹화
+            as_index = False            # 인덱스 사용 안함
+            )                           # 판매액 합계
+        st.dataframe(region.style.background_gradient(cmap="Oranges"))  # 데이터프레임 출력
+        csv = region.to_csv(index = False).encode('utf-8')   # 데이터프레임을 csv로 변환
+        st.download_button(
+            "데이터 다운로드", 
+            data = csv, 
+            file_name = "Category.csv", 
+            mime = "text/csv",
+            help = 'CSV 파일로 데이터를 다운로드하기 위해 클릭하세요.'
+        )
 
 #######################
 # 사이드바 설정
@@ -182,9 +215,8 @@ with col[1]:
                     max_value=max(df_selected_year_sorted.population),
                  )}
              )
-  # 데이터 보기
-  with st.expander("데이터 보기"):
-       st.dataframe(df_korea_economics.style.background_gradient(cmap="Oranges"))
+
+
 
 
 
