@@ -156,7 +156,7 @@ df_korea_economics['population'] = (
 col = st.columns((6.5, 4.5), gap='large')
 
 with col[0]: # 왼쪽
-   st.markdown('#### ' + str(selected_year) + '년 ' + str(selected_category))
+  st.markdown('#### ' + str(selected_year) + '년 ' + str(selected_category))
     
   choropleth = make_choropleth(df_selected_year, korea_geojson, 'population', selected_color_theme)
   st.plotly_chart(choropleth, use_container_width=True)
@@ -165,23 +165,22 @@ with col[0]: # 왼쪽
   st.altair_chart(heatmap, use_container_width=True)
 
 with col[1]:
+  st.markdown('#### 시도별 ' + str(selected_category))
 
-    st.markdown('#### 시도별 ' + str(selected_category))
-
-    st.dataframe(df_selected_year_sorted,
-                 column_order=("city", "population"),
-                 hide_index=True,
-                 width=500,
-                 column_config={
-                    "city": st.column_config.TextColumn(
-                        "시도명",
-                    ),
-                    "population": st.column_config.ProgressColumn(
-                        str(selected_category),
-                        format="%f",
-                        min_value=0,
-                        max_value=max(df_selected_year_sorted.population),
-                     )}
-                 )
+  st.dataframe(df_selected_year_sorted,
+              column_order=("city", "population"),
+              hide_index=True,
+              width=500,
+              column_config={
+                  "city": st.column_config.TextColumn(
+                    "시도명",
+                  ),
+                  "population": st.column_config.ProgressColumn(
+                    str(selected_category),
+                    format="%f",
+                    min_value=0,
+                    max_value=max(df_selected_year_sorted.population),
+                 )}
+             )
   df_korea_economics
 
