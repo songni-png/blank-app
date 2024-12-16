@@ -1,3 +1,4 @@
+#######################
 # 라이브러리 임포트
 import streamlit as st
 import pandas as pd
@@ -8,6 +9,8 @@ import plotly.express as px
 import json
 import os
 import glob
+
+#######################
 # 타이틀 텍스트 출력
 st.title('2000-2023 행정구역(시도) 별 경제활동인구')
 
@@ -16,28 +19,20 @@ st.write('.')
 # 사이드바
 st.sidebar.write('## 연도와 항목을 고르시오.') 
 
+
+#######################
 # 데이터 경로 설정
 data_path = os.path.abspath('행정구역_시도_별_경제활동인구_20241126130730.csv')
 
 # CSV 데이터 불러오기
 df_korea_economics = pd.read_csv(data_path, header=1, encoding='utf-8')
 
-# 'code' 열이 존재하는지 확인하고, 존재하지 않는 경우 추가 
-if 'code' not in df_korea_economics.columns: 
-    df_korea_economics['code'] = 'default_code' # 기본값으로 'default_code' 추가 
+korea_geojson = json.load(open('KOREA_시도_geoJSON.json', encoding="UTF-8")) # json 파일 불러오기
 
-# GeoJSON 파일 경로 설정
-geojson_path ='korea_시도.geojson' 
-with open(geojson_path, encoding='utf-8') as f: 
-    korea_geojson = json.load(f) 
-for feature in korea_geojson['geometries']: 
-    # CSV 파일에서 해당 code 값을 찾기 
-    matching_row = df_korea_economics[df_korea_economics['code'] == feature.get('code', 'default_code')] 
-    if not matching_row.empty: 
-        # 필요한 속성 값을 추가 
-        feature['properties'] = { 
-            '': matching_row['code'].values[0] # 예시로 'code' 키 사용 
-        } 
+
+#######################
+# 데이터 전처리
+
 # 숫자와 문자를 분리하는 코드 
 df_korea_economics[['code', 'city']] = df_korea_economics['A 시도별(1)'].str.extract(r'(\d+)\s*(.*)')
 
@@ -49,7 +44,6 @@ df_korea_economics = df_korea_economics.melt(
                      var_name = 'property',
                      value_name = 'population',
 )
-print(korea_geojson.keys())  # 객체의 키 목록을 출력
 
 # 연도 리스트 생성 
 years = [] 
@@ -75,6 +69,8 @@ year_list = [np.int64(year) for year in year_list]
 # 연도 리스트를 내림차순으로 정렬
 category_list = list(df_korea_economics.category.unique())[::-1]
 
+
+#######################
 # 사이드바 설정
 with st.sidebar:
     st.title('대한민국 경제활동인구 대시보드')
@@ -92,6 +88,8 @@ with st.sidebar:
     selected_color_theme = st.selectbox('컬러 테마 선택', color_theme_list)
 
 
+
+#######################
 # 그래프 함수
 
 # Heatmap 그래프
@@ -111,7 +109,7 @@ def make_heatmap(input_df_korea_economics, input_y, input_x, input_color, input_
         ) 
     # height=300
     return heatmap
-
+ 
 # Choropleth map
 def make_choropleth(input_df_korea_economics,input_korea_geojson,input_column, input_color_theme):
     # 'code' 열을 문자열로 변환 
@@ -120,8 +118,8 @@ def make_choropleth(input_df_korea_economics,input_korea_geojson,input_column, i
     choropleth = px.choropleth_mapbox(input_df_korea_economics,
                                       geojson=input_korea_geojson,
                                       locations='code', 
-                                      featureidkey='properties.code', 
-                                      mapbox_style='carto-darkmatter', 
+                                      featureidkey='properties.CTPRVN_CD',
+                                      mapbox_style='carto-darkmatter',
                                       zoom=5, 
                                       center = {"lat": 35.9, "lon": 126.98},
                                       color=input_column, 
@@ -129,7 +127,7 @@ def make_choropleth(input_df_korea_economics,input_korea_geojson,input_column, i
                                       range_color=(0, max(input_df_korea_economics.population)),
                                       labels={'population':'인구수', 'code':'시도코드', 'city':'시도명'},
                                       hover_data=['city', 'population']
-                                     )
+                                      )
     choropleth.update_geos(fitbounds="locations", visible=False)
     choropleth.update_layout(
         template='plotly_dark',
@@ -194,8 +192,6 @@ def adjust_population(row):
         return row['population']
     return row['population']
 
-df_korea_economics['population'] = df_korea_economics.apply(adjust_population, axis=1)
-
 # Convert population to text 
 def format_number(num):
     if num > 1000000:
@@ -204,18 +200,26 @@ def format_number(num):
         return f'{round(num / 1000000, 1)} M'
     return f'{num // 1000} K'
 
+# Calculate population difference 
 def calculate_population_difference(input_df_korea_economics, input_year, input_category): 
-    selected_year_data = input_df_korea_economics.query('year == @input_year & category == @input_category')
-    previous_year_data = input_df_korea_economics.query('year == @input_year - 1 & category == @input_category')
+    selected_year_data = input_df_korea_economics.query('year == @input_year & category == @input_category').reset_index() 
+    previous_year_data = input_df_korea_economics.query('year == @input_year - 1 & category == @input_category').reset_index() 
     
-    if not selected_year_data.empty and not previous_year_data.empty:
-        merged_data = pd.merge(selected_year_data, previous_year_data, on='code', suffixes=('', '_prev'))
-        merged_data['population_difference'] = merged_data['population'] - merged_data['population_prev']
-        merged_data['population_difference_abs'] = merged_data['population_difference'].abs()
-        return merged_data[['city', 'code', 'population', 'population_difference', 'population_difference_abs']]
-    else:
-        return pd.DataFrame(columns=['city', 'code', 'population', 'population_difference', 'population_difference_abs'])
-
+    if not selected_year_data.empty and not previous_year_data.empty: 
+        selected_year_data['population_difference'] = selected_year_data['population'].sub(previous_year_data['population'], fill_value=0) 
+        selected_year_data['population_difference_abs'] = abs(selected_year_data['population_difference']) 
+    
+    else: 
+        selected_year_data['population_difference'] = 0 
+        selected_year_data['population_difference_abs'] = 0
+   
+    return pd.concat([ 
+        selected_year_data['city'], 
+        selected_year_data['code'], 
+        selected_year_data['population'], 
+        selected_year_data['population_difference'],
+        selected_year_data['population_difference_abs']
+    ], axis=1).sort_values(by='population_difference', ascending=False)
 
 # 대시보드 레이아웃
 col = st.columns((3, 6.5, 4.5), gap='large')
