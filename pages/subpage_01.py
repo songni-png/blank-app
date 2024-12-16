@@ -149,60 +149,48 @@ df_korea_economics['population'] = (
     .astype(float)      # 숫자로 변환
 )
 
-# 도넛 차트 
+# 도넛 차트
 def make_donut(input_response, input_text, input_color):
-    if input_color == 'blue':
-        chart_color = ['#29b5e8', '#155F7A']
-    if input_color == 'green':
-        chart_color = ['#27AE60', '#12783D']
-    if input_color == 'orange':
-        chart_color = ['#F39C12', '#875A12']
-    if input_color == 'red':
-        chart_color = ['#E74C3C', '#781F16']
+  if input_color == 'blue':
+      chart_color = ['#29b5e8', '#155F7A']
+  if input_color == 'green':
+      chart_color = ['#27AE60', '#12783D']
+  if input_color == 'orange':
+      chart_color = ['#F39C12', '#875A12']
+  if input_color == 'red':
+      chart_color = ['#E74C3C', '#781F16']
     
-    source = pd.DataFrame({
-        "Topic": ['', input_text],
-        "% value": [100 - input_response, input_response]
-    })
-    source_bg = pd.DataFrame({
-        "Topic": ['', input_text],
-        "% value": [100, 0]
-    })
-
-    # 도넛 차트 생성
-    plot = alt.Chart(source).mark_arc(innerRadius=45, cornerRadius=25).encode(
-        theta="% value",
-        color=alt.Color(
-            "Topic:N",
-            scale=alt.Scale(domain=[input_text, ''], range=chart_color),
-            legend=None
-        ),
-    ).properties(width=130, height=130)
-
-    # 텍스트 추가
-    text = plot.mark_text(
-        align='center', 
-        color=chart_color[0], 
-        font="Lato", 
-        fontSize=32, 
-        fontWeight=700, 
-        fontStyle="italic"
-    ).encode(
-        text=alt.value(f'{input_response:.1f} %')  # 소수점 1자리 표시
-    )
-
-    # 배경 차트 추가
-    plot_bg = alt.Chart(source_bg).mark_arc(innerRadius=45, cornerRadius=20).encode(
-        theta="% value",
-        color=alt.Color(
-            "Topic:N",
-            scale=alt.Scale(domain=[input_text, ''], range=chart_color),
-            legend=None
-        ),
-    ).properties(width=130, height=130)
-
-    return plot_bg + plot + text  # 백그라운드, 차트, 텍스트를 합침
-
+  source = pd.DataFrame({
+      "Topic": ['', input_text],
+      "% value": [100-input_response, input_response]
+  })
+  source_bg = pd.DataFrame({
+      "Topic": ['', input_text],
+      "% value": [100, 0]
+  })
+    
+  plot = alt.Chart(source).mark_arc(innerRadius=45, cornerRadius=25).encode(
+      theta="% value",
+      color= alt.Color("Topic:N",
+                      scale=alt.Scale(
+                          #domain=['A', 'B'],
+                          domain=[input_text, ''],
+                          # range=['#29b5e8', '#155F7A']),  # 31333F
+                          range=chart_color),
+                      legend=None),
+  ).properties(width=130, height=130)
+    
+  text = plot.mark_text(align='center', color="#29b5e8", font="Lato", fontSize=32, fontWeight=700, fontStyle="italic").encode(text=alt.value(f'{input_response} %'))
+  plot_bg = alt.Chart(source_bg).mark_arc(innerRadius=45, cornerRadius=20).encode(
+      theta="% value",
+      color= alt.Color("Topic:N",
+                      scale=alt.Scale(
+                          # domain=['A', 'B'],
+                          domain=[input_text, ''],
+                          range=chart_color),  # 31333F
+                      legend=None),
+  ).properties(width=130, height=130)
+  return plot_bg + plot + text # 백그라운드, 차트, 텍스트를 합쳐서 그래프 생성
 
 # Adjust population based on category
 def adjust_population(row):
@@ -213,7 +201,7 @@ def adjust_population(row):
         # Keep percentage as is
         return row['population']
     return row['population']
-
+  
 # Convert population to text 
 def format_number(num):
     if num > 1000000:
@@ -222,21 +210,20 @@ def format_number(num):
         return f'{round(num / 1000000, 1)} M'
     return f'{num // 1000} K'
 
-# Calculate population difference 
-def calculate_population_difference(input_df_korea_economics, input_year, input_category): 
-  selected_year_data = input_df_korea_economics.query('year == @input_year & category == @input_category').reset_index() 
-  previous_year_data = input_df_korea_economics.query('year == @input_year - 1 & category == @input_category').reset_index() 
-  
-  if not selected_year_data.empty and not previous_year_data.empty: 
-    merged_data = pd.merge(selected_year_data, previous_year_data, on='code', suffixes=('', '_prev')) 
-    merged_data['population_difference'] = merged_data['population'] - merged_data['population_prev'] 
-    merged_data['population_difference_abs'] = abs(merged_data['population_difference']) 
-  else: 
-    merged_data = selected_year_data.copy() 
-    merged_data['population_difference'] = 0 
-    merged_data['population_difference_abs'] = 0 
-   
-  return merged_data[['city', 'code', 'population', 'population_difference', 'population_difference_abs']].sort_values(by='population_difference', ascending=False)
+# Calculation year-over-year population migrations
+def calculate_population_difference(input_df, input_year, input_category):
+  selected_year_data = input_df.query('year == @input_year & category == @input_category').reset_index()
+  previous_year_data = input_df.query('year == @input_year-1 & category == @input_category').reset_index()
+  selected_year_data['population_difference'] = selected_year_data['population'].sub(previous_year_data['population'], fill_value=0)
+  selected_year_data['population_difference_abs'] = abs(selected_year_data['population_difference'])
+  return pd.concat([
+    selected_year_data['city'], 
+    selected_year_data['code'], 
+    selected_year_data['population'], 
+    selected_year_data['population_difference'], 
+    selected_year_data['population_difference_abs']
+    ], axis=1).sort_values(by='population_difference', ascending=False)
+
 
 # 대시보드 레이아웃
 col = st.columns((3, 6.5, 4.5), gap='large')
