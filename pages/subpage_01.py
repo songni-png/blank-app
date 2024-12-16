@@ -54,9 +54,9 @@ df_korea_economics = df_korea_economics[['city','code','year','category','popula
 
 # '계'를 '전국'으로 변경
 df_korea_economics['city'] = df_korea_economics['city'].replace('계', '전국')
-df_korea_growth['city'] = df_korea_growth['growth'].replace('강원특별자치도','강원도')
-df_korea_growth['city'] = df_korea_growth['growth'].replace('전북특별자치도','전라북도')
-df_korea_growth['city'] = df_korea_growth['growth'].replace('제주특별자치도','제주도')
+df_korea_growth['city'] = df_korea_growth['city'].replace('강원특별자치도','강원도')
+df_korea_growth['city'] = df_korea_growth['city'].replace('전북특별자치도','전라북도')
+df_korea_growth['city'] = df_korea_growth['city'].replace('제주특별자치도','제주도')
 # CSV에서 city와 code의 매핑 생성
 csv_mapping = dict(zip(df_korea_economics['city'], df_korea_economics['code']))
 
