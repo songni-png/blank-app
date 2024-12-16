@@ -224,24 +224,19 @@ def format_number(num):
 
 # Calculate population difference 
 def calculate_population_difference(input_df_korea_economics, input_year, input_category): 
-    selected_year_data = input_df_korea_economics.query('year == @input_year & category == @input_category').reset_index() 
-    previous_year_data = input_df_korea_economics.query('year == @input_year - 1 & category == @input_category').reset_index() 
-    
-    if not selected_year_data.empty and not previous_year_data.empty: 
-        selected_year_data['population_difference'] = selected_year_data['population'].sub(previous_year_data['population'], fill_value=0) 
-        selected_year_data['population_difference_abs'] = abs(selected_year_data['population_difference']) 
-    
-    else: 
-        selected_year_data['population_difference'] = 0 
-        selected_year_data['population_difference_abs'] = 0
+  selected_year_data = input_df_korea_economics.query('year == @input_year & category == @input_category').reset_index() 
+  previous_year_data = input_df_korea_economics.query('year == @input_year - 1 & category == @input_category').reset_index() 
+  
+  if not selected_year_data.empty and not previous_year_data.empty: 
+    merged_data = pd.merge(selected_year_data, previous_year_data, on='code', suffixes=('', '_prev')) 
+    merged_data['population_difference'] = merged_data['population'] - merged_data['population_prev'] 
+    merged_data['population_difference_abs'] = abs(merged_data['population_difference']) 
+  else: 
+    merged_data = selected_year_data.copy() 
+    merged_data['population_difference'] = 0 
+    merged_data['population_difference_abs'] = 0 
    
-    return pd.concat([ 
-        selected_year_data['city'], 
-        selected_year_data['code'], 
-        selected_year_data['population'], 
-        selected_year_data['population_difference'],
-        selected_year_data['population_difference_abs']
-    ], axis=1).sort_values(by='population_difference', ascending=False)
+  return merged_data[['city', 'code', 'population', 'population_difference', 'population_difference_abs']].sort_values(by='population_difference', ascending=
 
 # 대시보드 레이아웃
 col = st.columns((3, 6.5, 4.5), gap='large')
