@@ -23,18 +23,6 @@ df_korea_economics = pd.read_csv(data_path, header=1, encoding='utf-8')
 
 korea_geojson = json.load(open('KOREA_시도_geoJSON.json', encoding="UTF-8")) # json 파일 불러오기
 
-# CSV에서 city와 code의 매핑 생성
-csv_mapping = dict(zip(df_korea_economics['city'], df_korea_economics['code']))
-
-# GeoJSON 데이터를 GeoDataFrame으로 변환
-if isinstance(korea_geojson, dict):  # GeoJSON이 딕셔너리 형식이라면
-    korea_geojson = gpd.GeoDataFrame.from_features(korea_geojson['features'])
-
-
-# GeoJSON의 CTPRVN_CD 값을 CSV 매핑을 기반으로 업데이트
-korea_geojson['CTPRVN_CD'] = korea_geojson['CTP_KOR_NM'].map(csv_mapping).fillna(korea_geojson['CTPRVN_CD'])
-
-
 #######################
 # 데이터 전처리
 
@@ -73,6 +61,17 @@ year_list = list(df_korea_economics.year.unique())[::-1]
 year_list = [np.int64(year) for year in year_list]
 # 연도 리스트를 내림차순으로 정렬
 category_list = list(df_korea_economics.category.unique())[::-1]
+
+# CSV에서 city와 code의 매핑 생성
+csv_mapping = dict(zip(df_korea_economics['city'], df_korea_economics['code']))
+
+# GeoJSON 데이터를 GeoDataFrame으로 변환
+if isinstance(korea_geojson, dict):  # GeoJSON이 딕셔너리 형식이라면
+    korea_geojson = gpd.GeoDataFrame.from_features(korea_geojson['features'])
+
+
+# GeoJSON의 CTPRVN_CD 값을 CSV 매핑을 기반으로 업데이트
+korea_geojson['CTPRVN_CD'] = korea_geojson['CTP_KOR_NM'].map(csv_mapping).fillna(korea_geojson['CTPRVN_CD'])
 
 
 #######################
