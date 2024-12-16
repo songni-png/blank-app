@@ -153,7 +153,7 @@ df_korea_economics['population'] = (
 
 
 # 대시보드 레이아웃
-col = st.columns((6.5,3, 4.5), gap='large')
+col = st.columns((6.5, 4.5), gap='large')
 
 with col[0]: # 왼쪽
    st.markdown('#### ' + str(selected_year) + '년 ' + str(selected_category))
@@ -165,9 +165,7 @@ with col[0]: # 왼쪽
     st.altair_chart(heatmap, use_container_width=True)
 
 with col[1]:
-  df_korea_economics
 
-with col[2]:
     st.markdown('#### 시도별 ' + str(selected_category))
 
     st.dataframe(df_selected_year_sorted,
@@ -185,4 +183,5 @@ with col[2]:
                         max_value=max(df_selected_year_sorted.population),
                      )}
                  )
+  df_korea_economics
 
