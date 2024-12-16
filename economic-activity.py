@@ -102,7 +102,7 @@ with st.expander("선택한 데이터 보기"):    # 확장창
   st.download_button(
     "데이터 다운로드",    # 다운로드 버튼 명칭
     data = csv,          # 데이터 유형
-    file_name = "Year.csv",  # 파일명
+    file_name = "Selected_year_category.csv",  # 파일명
     mime = "text/csv",   # 파일 형식
     help = 'CSV 파일로 데이터를 다운로드하기 위해 클릭하세요.' # 마우스 버튼 이동시 도움말 표시
   )
