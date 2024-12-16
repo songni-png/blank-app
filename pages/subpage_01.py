@@ -49,6 +49,8 @@ df_korea_economics = df_korea_economics.melt(
                      var_name = 'property',
                      value_name = 'population',
 )
+print(korea_geojson.keys())  # 객체의 키 목록을 출력
+
 # 연도 리스트 생성 
 years = [] 
 for i in range(2023, 1999, -1): 
