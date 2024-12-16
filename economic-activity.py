@@ -197,8 +197,12 @@ with col[1]:
                     max_value=max(df_selected_year_sorted.population),
                  )}
              )
+
+  # '계'를 제외한 데이터프레임 생성 
+  df_selected_year_sorted_filtered = df_selected_year_sorted[df_selected_year_sorted['city'] != '계']
   
-  st.subheader("제품 카테고리별 판매액")
+  # 
+  st.subheader("도시별 ",selected_category)
   fig = px.bar(
     df_selected_year_sorted, 
     x = "city",
