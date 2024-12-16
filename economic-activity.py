@@ -94,38 +94,19 @@ with st.sidebar:
     selected_color_theme = st.selectbox('컬러 테마 선택', color_theme_list)
 
 #######################
- # 화면을 2개의 컬럼으로 나누기
-cl1, cl2 = st.columns(2)
+# 연도별 데이터 보기 
 
-# 첫번째 컬럼(카테고리별 데이터 보기)
-with cl1:
-    with st.expander("연도별 데이터 보기"):    # 확장창
-        st.dataframe(df_selected_year_sorted.style.background_gradient(cmap="Blues"))  # 데이터프레임 출력
-        csv = df_selected_year_sorted.to_csv(index = False).encode('utf-8')  # 데이터프레임을 csv로 변환
-        st.download_button(
-            "데이터 다운로드",    # 다운로드 버튼 명칭
-            data = csv,          # 데이터 유형
-            file_name = "Year.csv",  # 파일명
-            mime = "text/csv",   # 파일 형식
-            help = 'CSV 파일로 데이터를 다운로드하기 위해 클릭하세요.' # 마우스 버튼 이동시 도움말 표시
-        )
+with st.expander("연도별 데이터 보기"):    # 확장창
+  st.dataframe(df_selected_year_sorted.style.background_gradient(cmap="Blues"))  # 데이터프레임 출력
+  csv = df_selected_year_sorted.to_csv(index = False).encode('utf-8')  # 데이터프레임을 csv로 변환
+  st.download_button(
+    "데이터 다운로드",    # 다운로드 버튼 명칭
+    data = csv,          # 데이터 유형
+    file_name = "Year.csv",  # 파일명
+    mime = "text/csv",   # 파일 형식
+    help = 'CSV 파일로 데이터를 다운로드하기 위해 클릭하세요.' # 마우스 버튼 이동시 도움말 표시
+  )
 
-# 두번째 컬럼(지역별 데이터 보기)
-with cl2:
-    with st.expander("도시별 데이터 보기"):
-        Category = df_selected_year_sorted.groupby(   # 지역별 판매액 계산
-            by = "city",              # 지역별 그룹화
-            as_index = False            # 인덱스 사용 안함
-            )                           # 판매액 합계
-        st.dataframe(Category.style.background_gradient(cmap="Oranges"))  # 데이터프레임 출력
-        csv = Category.to_csv(index = False).encode('utf-8')   # 데이터프레임을 csv로 변환
-        st.download_button(
-            "데이터 다운로드", 
-            data = csv, 
-            file_name = "Category.csv", 
-            mime = "text/csv",
-            help = 'CSV 파일로 데이터를 다운로드하기 위해 클릭하세요.'
-        )
 
 #######################
 # 그래프 함수
