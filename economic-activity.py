@@ -202,8 +202,7 @@ with col[1]:
   df_selected_year_sorted_filtered = df_selected_year_sorted[df_selected_year_sorted['city'] != '계']
   
   # bar 그래프 시각화
-  st.subheader("도시별 ")
-  st.subheader(selected_category)
+  st.markdown('#### 시도별 ' + str(selected_category))
   fig = px.bar(
     df_selected_year_sorted_filtered, 
     x = "city",
