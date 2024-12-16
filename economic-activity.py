@@ -197,15 +197,16 @@ with col[1]:
                     max_value=max(df_selected_year_sorted.population),
                  )}
              )
+  
   st.subheader("제품 카테고리별 판매액")
-    fig = px.bar(
-        df_selected_year_sorted, 
-        x = "city", 
-        y = "population", 
-        text = ['${:,.2f}'.format(x) for x in df_selected_year_sorted["city"]],       
-        template = "seaborn"    # 그래프 테마 설정
-    )
-    st.plotly_chart(fig, use_container_width=True, height = 200)  # 그래프 출력
+  fig = px.bar(
+    df_selected_year_sorted, 
+    x = "city",
+    y = "population", 
+    text = ['${:,.2f}'.format(x) for x in df_selected_year_sorted["city"]],      
+    template = "seaborn"    # 그래프 테마 설정
+  )
+  st.plotly_chart(fig, use_container_width=True, height = 200)  # 그래프 출력
 
 
 
