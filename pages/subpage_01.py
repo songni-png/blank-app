@@ -166,7 +166,7 @@ with col[0]: # 왼쪽
   choropleth = make_choropleth(df_selected_year_sorted, korea_geojson, 'growth_rate', selected_color_theme)
   st.plotly_chart(choropleth, use_container_width=True)
     
-  heatmap = make_heatmap(df_korea_growth, 'year', 'city', 'growth_Rate', selected_color_theme)
+  heatmap = make_heatmap(df_korea_growth, 'year', 'city', 'growth_rate', selected_color_theme)
   st.altair_chart(heatmap, use_container_width=True)
 
 with col[1]:
