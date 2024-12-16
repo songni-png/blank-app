@@ -99,8 +99,8 @@ cl1, cl2 = st.columns(2)
 # 첫번째 컬럼(카테고리별 데이터 보기)
 with cl1:
     with st.expander("연도별 데이터 보기"):    # 확장창
-        st.dataframe(selected_year.style.background_gradient(cmap="Blues"))  # 데이터프레임 출력
-        csv = selected_year.to_csv(index = False).encode('utf-8')  # 데이터프레임을 csv로 변환
+        st.dataframe(df_selected_year_sorted.style.background_gradient(cmap="Blues"))  # 데이터프레임 출력
+        csv = df_selected_year_sorted.to_csv(index = False).encode('utf-8')  # 데이터프레임을 csv로 변환
         st.download_button(
             "데이터 다운로드",    # 다운로드 버튼 명칭
             data = csv,          # 데이터 유형
@@ -112,12 +112,12 @@ with cl1:
 # 두번째 컬럼(지역별 데이터 보기)
 with cl2:
     with st.expander("항목별 데이터 보기"):
-        region = selected_category.groupby(   # 지역별 판매액 계산
-            by = "category",              # 지역별 그룹화
+        category = df_selected_category_sorted.groupby(   # 지역별 판매액 계산
+            by = "city",              # 지역별 그룹화
             as_index = False            # 인덱스 사용 안함
             )                           # 판매액 합계
-        st.dataframe(region.style.background_gradient(cmap="Oranges"))  # 데이터프레임 출력
-        csv = region.to_csv(index = False).encode('utf-8')   # 데이터프레임을 csv로 변환
+        st.dataframe(category.style.background_gradient(cmap="Oranges"))  # 데이터프레임 출력
+        csv = df_selected_category_sorted.to_csv(index = False).encode('utf-8')   # 데이터프레임을 csv로 변환
         st.download_button(
             "데이터 다운로드", 
             data = csv, 
