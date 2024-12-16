@@ -129,7 +129,7 @@ def make_choropleth(input_df_korea_economics,input_korea_geojson,input_column, i
                                       color=input_column, 
                                       color_continuous_scale=input_color_theme,
                                       range_color=(0, max(input_df_korea_economics.population)),
-                                      labels={'population':'category_list', 'code':'시도코드', 'city':'시도명'},
+                                      labels={'population':category_list, 'code':'시도코드', 'city':'시도명'},
                                       hover_data=['city', 'population']
                                       )
     choropleth.update_geos(fitbounds="locations", visible=False)
