@@ -142,49 +142,78 @@ def make_choropleth(input_df_korea_economics,input_korea_geojson,input_column, i
     )
     return choropleth
 
-# 도넛 차트
+df_korea_economics['population'] = (
+    df_korea_economics['population']
+    .replace('-', '0')  # '-'를 0으로 대체
+    .fillna('0')        # NaN을 0으로 대체
+    .astype(float)      # 숫자로 변환
+)
+df_korea_economics['population_adjusted'] = df_korea_economics.apply(adjust_population, axis=1)
+
+print(f"States Migration Greater: {states_migration_greater}")
+print(f"States Migration Less: {states_migration_less}")
+print(f"Unique Cities: {df_population_difference_sorted.city.nunique()}")
+
+if df_population_difference_sorted.empty:
+    print("Population difference data is empty.")
+    states_migration_greater = 0
+    states_migration_less = 0
+print(f"Input Response: {input_response}")
+
+# 도넛 차트 
 def make_donut(input_response, input_text, input_color):
-  if input_color == 'blue':
-      chart_color = ['#29b5e8', '#155F7A']
-  if input_color == 'green':
-      chart_color = ['#27AE60', '#12783D']
-  if input_color == 'orange':
-      chart_color = ['#F39C12', '#875A12']
-  if input_color == 'red':
-      chart_color = ['#E74C3C', '#781F16']
+    if input_color == 'blue':
+        chart_color = ['#29b5e8', '#155F7A']
+    if input_color == 'green':
+        chart_color = ['#27AE60', '#12783D']
+    if input_color == 'orange':
+        chart_color = ['#F39C12', '#875A12']
+    if input_color == 'red':
+        chart_color = ['#E74C3C', '#781F16']
     
-  source = pd.DataFrame({
-      "Topic": ['', input_text],
-      "% value": [100-input_response, input_response]
-  })
-  source_bg = pd.DataFrame({
-      "Topic": ['', input_text],
-      "% value": [100, 0]
-  })
-    
-  plot = alt.Chart(source).mark_arc(innerRadius=45, cornerRadius=25).encode(
-      theta="% value",
-      color= alt.Color("Topic:N",
-                      scale=alt.Scale(
-                          #domain=['A', 'B'],
-                          domain=[input_text, ''],
-                          # range=['#29b5e8', '#155F7A']),  # 31333F
-                          range=chart_color),
-                      legend=None),
-  ).properties(width=130, height=130)
-    
-  text = plot.mark_text(align='center', color="#29b5e8", font="Lato", fontSize=32, fontWeight=700, fontStyle="italic").encode(text=alt.value(f'{input_response} %'))
-  plot_bg = alt.Chart(source_bg).mark_arc(innerRadius=45, cornerRadius=20).encode(
-      theta="% value",
-      color= alt.Color("Topic:N",
-                      scale=alt.Scale(
-                          # domain=['A', 'B'],
-                          domain=[input_text, ''],
-                          range=chart_color),  # 31333F
-                      legend=None),
-  ).properties(width=130, height=130)
-  return plot_bg + plot + text # 백그라운드, 차트, 텍스트를 합쳐서 그래프 생성
-df_korea_economics['population'] = df_korea_economics['population'].replace('-','0').fillna('0').astype(float)
+    source = pd.DataFrame({
+        "Topic": ['', input_text],
+        "% value": [100 - input_response, input_response]
+    })
+    source_bg = pd.DataFrame({
+        "Topic": ['', input_text],
+        "% value": [100, 0]
+    })
+
+    # 도넛 차트 생성
+    plot = alt.Chart(source).mark_arc(innerRadius=45, cornerRadius=25).encode(
+        theta="% value",
+        color=alt.Color(
+            "Topic:N",
+            scale=alt.Scale(domain=[input_text, ''], range=chart_color),
+            legend=None
+        ),
+    ).properties(width=130, height=130)
+
+    # 텍스트 추가
+    text = plot.mark_text(
+        align='center', 
+        color=chart_color[0], 
+        font="Lato", 
+        fontSize=32, 
+        fontWeight=700, 
+        fontStyle="italic"
+    ).encode(
+        text=alt.value(f'{input_response:.1f} %')  # 소수점 1자리 표시
+    )
+
+    # 배경 차트 추가
+    plot_bg = alt.Chart(source_bg).mark_arc(innerRadius=45, cornerRadius=20).encode(
+        theta="% value",
+        color=alt.Color(
+            "Topic:N",
+            scale=alt.Scale(domain=[input_text, ''], range=chart_color),
+            legend=None
+        ),
+    ).properties(width=130, height=130)
+
+    return plot_bg + plot + text  # 백그라운드, 차트, 텍스트를 합침
+
 
 # Adjust population based on category
 def adjust_population(row):
